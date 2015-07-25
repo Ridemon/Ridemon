@@ -1,7 +1,6 @@
 // Express server
 var express = require('express');
 var bodyParser = require('body-parser');
-var request = require('request');
 
 var myFB = require('./server/db/dbHelper');
 var uberHelper = require('./server/http/httpHelpers');

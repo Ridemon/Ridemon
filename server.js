@@ -5,6 +5,9 @@ var bodyParser = require('body-parser');
 var myFB = require('./server/db/dbHelper');
 var uberHelper = require('./server/http/httpHelpers');
 
+var myFB = require('./server/db/dbHelper');
+var uberHelper = require('./server/http/httpHelpers');
+
 var app = express();
 var port = process.env.PORT || 3333;
 

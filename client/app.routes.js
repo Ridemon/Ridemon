@@ -11,5 +11,9 @@ RidemonApp.config(["$stateProvider", "$urlRouterProvider", function($stateProvid
       url: "/pokedex",
       templateUrl: "components/pokedex/pokedex.html"
     })
+    .state("about", {
+      url: "/about",
+      templateUrl: "components/about/about.html"
+    });
 
 }]);

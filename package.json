@@ -1,0 +1,17 @@
+{
+  "name": "Ridemon",
+  "version": "1.0.0",
+  "description": "Ridemon",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Travis Neufeld, Tessa Kelly, Thomas Logan",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.13.2",
+    "express": "^4.13.1",
+    "request": "^2.58.0"
+  }
+}

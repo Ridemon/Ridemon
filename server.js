@@ -13,7 +13,7 @@ app.use(express.static('bower_components'));
 
 app.use(bodyParser.json());
 
-app.get('/uberData', uberHelper);
+// app.get('/uberData', uberHelper);
 
 app.get('/', function(req, res) {
   myFB.set("hello world!");

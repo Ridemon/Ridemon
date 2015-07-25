@@ -1,5 +1,7 @@
-var pokedex = angular.module('RidemonApp', []);
+RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', function($scope, $firebaseObject) {
+  $scope.welcome = "Welcome to the Pokedex!!!"
 
-pokedex.controller('fillPokedex', ['$scope', function($scope) {
-
-}])
+  var pokeData = new Firebase("https://ridemon.firebaseio.com/");
+  var testObj = $firebaseObject(pokeData);
+  console.log(testObj);
+}]);

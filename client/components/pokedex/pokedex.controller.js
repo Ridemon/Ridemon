@@ -1,5 +1,3 @@
-var pokedex = angular.module('RidemonApp', []);
-
-pokedex.controller('fillPokedex', ['$scope', function($scope) {
-
-}])
+RidemonApp.controller('PokedexController', ['$scope', function($scope) {
+  $scope.welcome = "Welcome to the Pokedex!!!"
+}]);

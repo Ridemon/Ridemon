@@ -10,11 +10,9 @@
   "author": "Travis Neufeld, Tessa Kelly, Thomas Logan",
   "license": "ISC",
   "dependencies": {
-    "angularfire": "^1.1.2",
     "body-parser": "^1.13.2",
     "bower": "^1.4.1",
     "express": "^4.13.1",
-    "firebase": "^2.2.7",
     "request": "^2.58.0"
   }
 }

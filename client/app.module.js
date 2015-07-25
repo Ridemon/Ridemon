@@ -1,0 +1,1 @@
+var RidemonApp = angular.module("RidemonApp", ["ui.router"]);

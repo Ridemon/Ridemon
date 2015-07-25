@@ -7,6 +7,7 @@ var app = express();
 var port = process.env.PORT || 3333;
 
 app.use('/', express.static(__dirname + '/client'));
+app.use(express.static('bower_components'));
 
 app.use(bodyParser.json());
 

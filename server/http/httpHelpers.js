@@ -16,14 +16,22 @@ surge_confirmation_id (optional)  string  The unique identifier of the surge ses
 module.exports.requestRide = function(req, res) {
 
   var token = req.session.access_token;
+
   // First get uber products for the area of request
-  var latitude = 37,
-      longitude = -122;
+  var startLat = req.body.data.start_latitude,
+      startLong = req.body.data.start_longitude;
 
-  var endLat = 37.5;
-  var endLong = -122.5;
+  var endLat = req.body.data.end_latitude,
+      endLong = req.body.data.end_longitude;
 
-  getProducts(latitude, longitude, token, function(data) {
+  console.log('req: ', req);
+  console.log('startLat: ', startLat);
+  console.log('startLong: ', startLong);
+  console.log('endLat: ', endLat);
+  console.log('endLong: ', endLong);
+
+
+  getProducts(startLat, startLong, token, function(data) {
     console.log(data);
     var product_id = data.products[0].product_id;
     request({
@@ -31,8 +39,8 @@ module.exports.requestRide = function(req, res) {
       method: 'POST',
       json: {
         'product_id': product_id,
-        'start_latitude': latitude,
-        'start_longitude': longitude,
+        'start_latitude': startLat,
+        'start_longitude': startLong,
         'end_latitude': endLat,
         'end_longitude': endLong
       },

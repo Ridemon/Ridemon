@@ -1,1 +1,1 @@
-var RidemonApp = angular.module("RidemonApp", ["ui.router"]);
+var RidemonApp = angular.module("RidemonApp", ["ui.router", "firebase"]);

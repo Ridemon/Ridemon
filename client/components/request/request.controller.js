@@ -65,6 +65,9 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
       parseAddressToLatLng($scope.request.end_address).then(function(res) {
         end = res;
         rideRequest.data = {};
+        if(!start.lat || !start.lng || !end.lat || end.lng) {
+          return new Error("Missing latitude or longitude information");
+        }
         rideRequest.data.start_latitude = start.lat;
         rideRequest.data.start_longitude = start.lng;
         rideRequest.data.end_latitude = end.lat;
@@ -88,7 +91,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
        if(data.status === "ZERO_RESULTS") {
          $scope.message = "We found zero results for that address.";
          $scope.cancel();
-       } else if(data && data.data && data.data.results) {
+       } else if(data && data.data && data.data.results && data.data.results[0] && data.data.results[0].geometry) {
          return data.data.results[0].geometry.location;
        } else {
          $scope.message = "No results.";

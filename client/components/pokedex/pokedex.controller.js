@@ -20,6 +20,7 @@ RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', '$http'
     var pokey = {};
     $http.get("http://pokeapi.co/api/v1/pokemon/" + pokeId)
       .success(function(data) {
+        console.log(data);
         pokey.abilities = data.abilities;
         if(data.evolutions.length > 0){
           pokey.evolvesTo = data.evolutions[0].to;
@@ -33,19 +34,21 @@ RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', '$http'
     return pokey;
   };
 
-  $http.get('http://localhost:3333/pokedex')
-    .success(function(pokemon) {
+  $http.get('/pokedex')
+    .success(function(pokemon, blah) {
       for(var pokemonId in pokemon) {
         var newPokemon = getPokemon(pokemonId);
         newPokemon.caught = timeSince(pokemon[pokemonId].caught) + ' ago';
         $scope.pokemon.push(newPokemon);
       }
+    })
+    .error(function(err) {
+      console.error(error);
     });
 
 }]);
 
 function timeSince(date) {
-
     var seconds = Math.floor((new Date() - date) / 1000);
 
     var interval = Math.floor(seconds / 31536000);

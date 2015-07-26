@@ -24,7 +24,6 @@ module.exports.addPokemon = function(req, response) {
 
 module.exports.getPokemon = function(req, response) {
   var userId = req.session.userId;
-  //var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
   var pokemonArray = [];
 
   request({
@@ -34,9 +33,9 @@ module.exports.getPokemon = function(req, response) {
     if (error) {
       console.log(error);
     }
-
+    
     if(body) {
-      response.end(JSON.stringify(body.pokemonIds));
+      response.end(JSON.stringify(JSON.parse(body).pokemonIds));
     } else {
       response.end(JSON.stringify({pokemonIds: {}}));
     }

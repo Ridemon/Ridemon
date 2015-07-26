@@ -6,7 +6,7 @@ var uberStrategy = require('passport-uber');
 var uberAPIData = require('./server/config/config');
 var firebase = require('./server/db/dbHelper');
 var uberHelper = require('./server/http/httpHelpers');
-var pokemonHelper = require('./server/http/pokeHelpers')
+var pokemonHelper = require('./server/http/pokeHelpers');
 
 var session = require('express-session');
 

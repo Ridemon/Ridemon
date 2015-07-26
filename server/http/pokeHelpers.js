@@ -20,7 +20,6 @@ module.exports.requestPokemon = function(req, response) {
     if (!error && response.statusCode == 200) {
       console.log(JSON.parse(body)) 
       response.send("Hello, World");
-
     } else {
       console.log('error:', error);
     }

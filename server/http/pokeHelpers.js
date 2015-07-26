@@ -65,7 +65,7 @@ module.exports.getPokemon = function(req, response) {
       console.log(error);
     }
     
-    if(body) {
+    if(JSON.parse(body)) {
       var pokemonIds = JSON.parse(body).pokemonIds;
       var index = 0, count = 0;
       for(var pokemonId in pokemonIds) {
@@ -81,7 +81,7 @@ module.exports.getPokemon = function(req, response) {
         index++;
       }
     } else {
-      response.end(JSON.stringify({pokemonIds: {}}));
+      response.end();
     }
   });
 };

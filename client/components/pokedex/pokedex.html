@@ -1,40 +1,40 @@
-<header class="center-text">
-  <h1>Your Pokedex!</h1>
-  <p ng-show="pokemon.length">These are the pokemon that you've earned. Enjoy them!</p>
-  <p ng-show="!pokemon.length">You haven't earned any pokemon yet. You gotta ride if you want to fill up your Pokedex!</p>
-</header>
-
-<hr>
-
 <div ng-controller="PokedexController">
-  <div class="pokemon" ng-repeat="pokemon in pokemon">
-    <div class="container-boxed-sm col-lg-2">
-      <div>
-        <img class="img-sm-overlay-right" data-ng-src="http://pokeapi.co{{ pokemon.image }}/">
+  <header class="center-text">
+    <h1>Your Pokedex!</h1>
+    <p id="pokemon-message">{{ pokemon.message }}</p>
+  </header>
+
+  <hr>
+
+  <div>
+    <div class="pokemon" ng-repeat="pokemon in pokemon.pokemon">
+      <div class="container-boxed-sm col-lg-2">
+        <div>
+          <img class="img-sm-overlay-right" data-ng-src="http://pokeapi.co{{ pokemon.image }}/">
+        </div>
+        <table class="table table-striped table-hover">
+          <tbody>
+            <tr>
+              <td>Name:</td>
+              <td ng-mouseover="readToMe(pokemon.name)"><strong>{{ pokemon.name }}</strong></td>
+            </tr>
+            <tr>
+              <td>Captured:</td>
+              <td>{{ pokemon.caught }}</td>
+            </tr>
+            <tr>
+              <td>Abilities:</td>
+              <td>
+                <p ng-repeat="ability in pokemon.abilities">{{ ability.name }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>Evolves to:</td>
+              <td>{{ pokemon.evolvesTo }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <table class="table table-striped table-hover">
-        <tbody>
-          <tr>
-            <td>Name:</td>
-            <td ng-mouseover="readToMe(pokemon.name)"><strong>{{ pokemon.name }}</strong></td>
-          </tr>
-          <tr>
-            <td>Captured:</td>
-            <td>{{ pokemon.caught }}</td>
-          </tr>
-          <tr>
-            <td>Abilities:</td>
-            <td>
-              <p ng-repeat="ability in pokemon.abilities">{{ ability.name }}</p>
-            </td>
-          </tr>
-          <tr>
-            <td>Evolves to:</td>
-            <td>{{ pokemon.evolvesTo }}</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </div>
-

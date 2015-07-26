@@ -15,8 +15,6 @@ RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', '$http'
   };
 
   $scope.pokemon = [];
-  // TODO: get actual pokemon ids. Looking for an array of pokemon objects,
-  // with name, captured_date, description, and image properties.
 
   var getPokemon = function(pokeId) {
     var pokey = {};
@@ -34,8 +32,6 @@ RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', '$http'
       });
     return pokey;
   };
-
-  var pokemonIds = [];
 
   $http.get('http://localhost:3333/pokedex')
     .success(function(pokemon) {

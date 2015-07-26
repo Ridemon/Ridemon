@@ -45,8 +45,9 @@ module.exports.requestRide = function(req, res) {
           'Authorization': 'Bearer ' + token
         }
       }, function(error, response, body) {
-        console.log('body:', body);
-        console.log('error:', error);
+        if(error) {
+          console.log('error:', error);
+        }
         res.end();
       });
     });
@@ -54,7 +55,6 @@ module.exports.requestRide = function(req, res) {
 };
 
 var getProducts = function(lat, long, token, callback) {
-  console.log(token);
   request({
     url: 'https://api.uber.com/v1/products',
     method: 'GET',

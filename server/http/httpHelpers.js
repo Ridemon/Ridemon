@@ -24,40 +24,37 @@ module.exports.requestRide = function(req, res) {
   var endLat = req.body.data.end_latitude,
       endLong = req.body.data.end_longitude;
 
-  console.log('req: ', req);
-  console.log('startLat: ', startLat);
-  console.log('startLong: ', startLong);
-  console.log('endLat: ', endLat);
-  console.log('endLong: ', endLong);
-
-
-  getProducts(startLat, startLong, token, function(data) {
-    console.log(data);
-    var product_id = data.products[0].product_id;
-    request({
-      url: 'https://sandbox-api.uber.com/v1/requests',
-      method: 'POST',
-      json: {
-        'product_id': product_id,
-        'start_latitude': startLat,
-        'start_longitude': startLong,
-        'end_latitude': endLat,
-        'end_longitude': endLong
-      },
-      headers: {
-        'Content-Type': 'application/JSON',
-        'Authorization': 'Bearer ' + token
-      }
-    }, function(error, response, body) {
-      console.log('body:', body);
-      console.log('error:', error);
-      res.end();
+  if(token === undefined) {
+    console.log('Error: user not authenticated');
+    res.status(401).end();
+  } else {
+    getProducts(startLat, startLong, token, function(data) {
+      var product_id = data.products[0].product_id;
+      request({
+        url: 'https://sandbox-api.uber.com/v1/requests',
+        method: 'POST',
+        json: {
+          'product_id': product_id,
+          'start_latitude': startLat,
+          'start_longitude': startLong,
+          'end_latitude': endLat,
+          'end_longitude': endLong
+        },
+        headers: {
+          'Content-Type': 'application/JSON',
+          'Authorization': 'Bearer ' + token
+        }
+      }, function(error, response, body) {
+        if(error) {
+          console.log('error:', error);
+        }
+        res.end();
+      });
     });
-  });
+  }
 };
 
 var getProducts = function(lat, long, token, callback) {
-  console.log(token);
   request({
     url: 'https://api.uber.com/v1/products',
     method: 'GET',

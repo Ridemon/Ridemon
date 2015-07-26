@@ -14,7 +14,11 @@ module.exports.addPokemon = function(req, response) {
   var savePokemonId = function() {
     var userId = req.session.userId;
     var name = req.session.name;
-    var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/" + name + "/pokemonIds/" + pokemonId + "/");
+    var setName = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/name/");
+    setName.set({
+      name: name
+    })
+    var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
     myFirebaseRef.set({
       caught: timeInMs
     });
@@ -97,34 +101,3 @@ module.exports.getPokemon = function(req, response) {
   });
 };
 
-// module.exports.loadLeaderboard = function(req, response) {
-//   var userId = req.session.userId;
-
-//   request({
-//     url: 'https://ridemon.firebaseio.com/users/userIds.json',
-//     method: 'GET'
-//   }, function(error, res, body) {
-//     if (error) {
-//       console.log(error);
-//     }
-//     console.log(body)
-//     if(JSON.parse(body)) {
-//       var pokemonIds = JSON.parse(body).pokemonIds;
-//       var index = 0, count = 0;
-//       for(var pokemonId in pokemonIds) {
-//         +(function(ind) {
-//           getOnePokemon(pokemonId, function(data) {
-//             pokemonArray[ind] = data;    
-//             count++;
-//             if(count === index) {
-//               response.send(pokemonArray);
-//             }
-//           });
-//         })(index);
-//         index++;
-//       }
-//     } else {
-//       response.end();
-//     }
-//   });
-// };

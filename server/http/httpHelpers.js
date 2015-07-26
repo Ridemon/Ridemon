@@ -1,23 +1,5 @@
 var request = require('request');
 
-module.exports.getPrice = function(req, response) {
-  var queryData = req.query;
-  console.log(queryData);
-
-  request({
-    url: 'https://sandbox-api.uber.com/v1/estimates/price',
-    method: 'GET',
-    qs: req.query,
-    headers: {
-      'Content-Type': 'application/JSON',
-    }
-  }, function(error, res, body) {
-    console.log('body:', body);
-    console.log('error:', error);
-    response.send(JSON.parse(body));
-  })
-};
-
 /*
 Ride Request
 
@@ -31,6 +13,7 @@ end_latitude          float   The final or destination latitude.
 end_longitude         float   The final or destination longitude.
 surge_confirmation_id (optional)  string  The unique identifier of the surge session for a user. Required when returned from a 409 Conflict response on previous POST attempt.
 */
+
 module.exports.requestRide = function(req, res) {
   request({
     url: 'https://sandbox-api.uber.com/v1/requests',
@@ -45,3 +28,7 @@ module.exports.requestRide = function(req, res) {
     response.send(JSON.parse(body));
   })
 };
+
+
+
+

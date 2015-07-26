@@ -24,6 +24,8 @@ module.exports.requestRide = function(req, res) {
   var endLat = req.body.data.end_latitude,
       endLong = req.body.data.end_longitude;
 
+  console.log(startLat, startLong, endLat, endLong);
+
   if(token === undefined) {
     console.log('Error: user not authenticated');
     res.status(401).end();
@@ -60,6 +62,8 @@ module.exports.requestRide = function(req, res) {
 };
 
 var getProducts = function(lat, long, token, callback) {
+  console.log("Token", token)
+  console.log("lat", lat, "long", long);
   request({
     url: 'https://api.uber.com/v1/products',
     method: 'GET',

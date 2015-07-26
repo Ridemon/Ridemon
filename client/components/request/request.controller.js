@@ -41,19 +41,20 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
   };
 
   var parseAddressToLatLng = function(address) {
-    return $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + address)
-      .success(function(data) {
-        if(data.status === "ZERO_RESULTS") {
-          $scope.message = "We found zero results for that address.";
-          $scope.cancel();
-        } else if(data && data.data && data.data.results) {
-          return data.data.results[0].geometry.location;
-        } else {
-          $scope.message = "No results.";
-          $scope.cancel();
-        }
-          return;
-      });
+   return $q(function(resolve, reject) {
+      $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + address)
+        .then(resolve);
+    }).then(function(data) {
+       if(data.status === "ZERO_RESULTS") {
+         $scope.message = "We found zero results for that address.";
+         $scope.cancel();
+       } else if(data && data.data && data.data.results) {
+         return data.data.results[0].geometry.location;
+       } else {
+         $scope.message = "No results.";
+         $scope.cancel();
+       }
+    });
   };
 
   $scope.reset();

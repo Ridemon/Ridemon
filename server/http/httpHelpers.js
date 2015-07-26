@@ -53,7 +53,6 @@ module.exports.requestRide = function(req, res) {
           if(error) {
             console.log('error:', error);
           }
-
           if(legendary === false) {
             pokemonHelper.addPokemon(req, res);
           } else {

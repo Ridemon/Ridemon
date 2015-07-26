@@ -16,6 +16,7 @@
     "express": "^4.13.1",
     "express-session": "^1.11.3",
     "firebase": "^2.2.7",
+    "http": "0.0.0",
     "request": "^2.58.0"
   }
 }

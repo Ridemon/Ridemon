@@ -1,5 +1,6 @@
-<div class="col-lg-10" ng-controller="RequestController">
-  <div class="well bs-component">
+<div ng-controller="RequestController">
+  <div class="col-lg-1"></div>
+  <div class="col-lg-10 well bs-component">
     <form name="requestRideForm" novalidate class="form-horizontal" ng-submit="requestRide()" >
       <fieldset>
         <legend>Request a Ride</legend>
@@ -30,4 +31,5 @@
     <ng-include src="'partials/requestError.html'"></ng-include>
     <ng-include src="'partials/rideConfirmation.html'"></ng-include>
   </div>
+  <div class="col-lg-1"></div>
 </div>

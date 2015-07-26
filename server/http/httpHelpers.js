@@ -29,28 +29,33 @@ module.exports.requestRide = function(req, res) {
     res.status(401).end();
   } else {
     getProducts(startLat, startLong, token, function(data) {
-      var product_id = data.products[0].product_id;
-      request({
-        url: 'https://sandbox-api.uber.com/v1/requests',
-        method: 'POST',
-        json: {
-          'product_id': product_id,
-          'start_latitude': startLat,
-          'start_longitude': startLong,
-          'end_latitude': endLat,
-          'end_longitude': endLong
-        },
-        headers: {
-          'Content-Type': 'application/JSON',
-          'Authorization': 'Bearer ' + token
-        }
-      }, function(error, response, body) {
-        if(error) {
-          console.log('error:', error);
-        }
-        res.end();
-      });
-    });
+      if (data.products[0].length > 0) {
+        var product_id = data.products[0].product_id;
+        request({
+          url: 'https://sandbox-api.uber.com/v1/requests',
+          method: 'POST',
+          json: {
+            'product_id': product_id,
+            'start_latitude': startLat,
+            'start_longitude': startLong,
+            'end_latitude': endLat,
+            'end_longitude': endLong
+          },
+          headers: {
+            'Content-Type': 'application/JSON',
+            'Authorization': 'Bearer ' + token
+          }
+
+        }, function(error, response, body) {
+          if(error) {
+            console.log('error:', error);
+          }
+          res.end();
+        });
+      } else {
+        res.status(400).end();
+      }
+  });
   }
 };
 

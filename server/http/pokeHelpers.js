@@ -1,7 +1,7 @@
 var Firebase = require('firebase');
-var request = require('request');
 
 module.exports.addPokemon = function(req, response) {
+
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
   };

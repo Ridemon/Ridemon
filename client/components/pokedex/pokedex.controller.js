@@ -39,7 +39,6 @@ RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', '$http'
 
   $http.get('http://localhost:3333/pokedex')
     .success(function(pokemon) {
-      console.log(pokemon);
       for(var pokemonId in pokemon) {
         var newPokemon = getPokemon(pokemonId);
         newPokemon.caught = timeSince(pokemon[pokemonId].caught) + ' ago';

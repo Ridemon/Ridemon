@@ -1,6 +1,15 @@
 RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($scope, $http, $q) {
   $scope.current = {};
-  $scope.request = {};
+  
+  $scope.reset = function() {
+    $scope.request = {};
+    $scope.cancel();
+    $scope.message = "";
+  };
+
+  $scope.cancel = function() {
+    $scope.cleanSlate = true;
+  };
 
   $scope.useCurrentLocation = function() {
     $scope.request.start_address = $scope.current.address;
@@ -8,6 +17,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
 
   $scope.requestRide = function() {
     $scope.message = "";
+    $scope.cleanSlate = false;
     var start, end;
     var rideRequest = {};
     parseAddressToLatLng($scope.request.start_address).then(function(res) {
@@ -21,20 +31,32 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
         rideRequest.data.end_longitude = end.lng;
         $http.post("/request-ride", rideRequest)
           .error(function(data) {
-            $scope.message = "We're sorry! Something went wrong. Please try again.";
+            if(!$scope.message) {
+              $scope.message = "We're sorry! Something went wrong. Please try again.";
+              $scope.cancel();
+            }
           });
       });
     });
   };
 
   var parseAddressToLatLng = function(address) {
-    return $q(function(resolve, reject) {
-      $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + address)
-        .then(resolve);
-    }).then(function(data) {
-        return data.data.results[0].geometry.location;
-    });
+    return $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + address)
+      .success(function(data) {
+        if(data.status === "ZERO_RESULTS") {
+          $scope.message = "We found zero results for that address.";
+          $scope.cancel();
+        } else if(data && data.data && data.data.results) {
+          return data.data.results[0].geometry.location;
+        } else {
+          $scope.message = "No results.";
+          $scope.cancel();
+        }
+          return;
+      });
   };
+
+  $scope.reset();
 
   // Get current position
   navigator.geolocation.getCurrentPosition(
@@ -42,7 +64,12 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
     function(position) {
       $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude)
         .success(function(data) {
-          $scope.current.address = data.results[0].formatted_address;
+          if(data && data.results && data.results[0] && data.results[0].formatted_address) {
+            $scope.current.address = data.results[0].formatted_address;
+          } else {
+            $scope.message = "We don't recognize that address. Please try again.";
+            $scope.cancel();
+          }
         })
     },
     // TODO: Handle geolocation failure/disallowal

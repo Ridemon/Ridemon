@@ -20,3 +20,9 @@
 .img-grav {
   max-width: 200px;
 }
+
+.img-gif {
+  max-width: 100px;
+  float: left;
+  border-radius: 20%;
+}

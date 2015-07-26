@@ -59,7 +59,9 @@ app.get('/auth/uber/callback', function(req, res) {
     req.session.access_token = body.access_token;
 
     req.session.save(function(err) {
-      console.log('Error: ', err);
+      if(err) {
+        console.log('Error: ', err);
+      }
     });
 
     request({
@@ -70,10 +72,10 @@ app.get('/auth/uber/callback', function(req, res) {
       }
     }, function(error, response, body) {
       body = JSON.parse(body);
-      console.log(body);
-    })
+      res.cookie('first_name', body.first_name);
+      res.redirect('/');
+    });
 
-    res.redirect('/');
   })
 });
 

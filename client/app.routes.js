@@ -1,4 +1,4 @@
-RidemonApp.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+RidemonApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", function($stateProvider, $urlRouterProvider, $locationProvider) {
 
   $urlRouterProvider.otherwise("/");
 
@@ -24,4 +24,5 @@ RidemonApp.config(["$stateProvider", "$urlRouterProvider", function($stateProvid
       templateUrl: "components/request/request.html"
     });
 
+    $locationProvider.html5Mode(true);
 }]);

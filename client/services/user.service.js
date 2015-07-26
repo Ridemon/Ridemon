@@ -1,4 +1,4 @@
-RidemonApp.factory("UserService", ["$http", function($http) {
+RidemonApp.factory("UserService", ["$http", "$state", function($http, $state) {
   var user = {};
   var login = function() {
     var firstInd = document.cookie.indexOf("first_name");
@@ -14,7 +14,10 @@ RidemonApp.factory("UserService", ["$http", function($http) {
       delete user.first_name;
       delete user.loggedIn;
       document.cookie="first_name='';expires=" + new Date(0).toGMTString();
-      $http.get('/logout');
+      $http.get('/logout')
+        .success(function() {
+          $state.go("login");
+        });
     }
   };
 }]);

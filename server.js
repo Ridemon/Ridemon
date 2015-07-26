@@ -12,21 +12,27 @@ var session = require('express-session');
 var app = express();
 var port = process.env.PORT || 3333;
 
-var token;
+FirebaseStore = require('connect-firebase')(session);
+
+var options = {
+  host: 'ridemon.firebaseio.com/sessions'
+}
+
+app.use(session({
+  store: new FirebaseStore(options),
+  secret: 'jigglypuff',
+  resave: true,
+  saveUninitialized: true
+}));
 
 app.use('/', express.static(__dirname + '/client'));
 app.use(express.static('bower_components'));
 
 app.use(bodyParser.json());
 
-app.use(session({
-  secret: 'jigglypuff',
-  resave: false,
-  saveUninitialized: true
-}));
-
 app.get('/login', function(req, res) {
-  res.redirect('https://login.uber.com/oauth/authorize?response_type=code&scope=profile&client_id=' + uberAPIData.clientID);
+  console.log(req.session);
+  res.redirect('https://login.uber.com/oauth/authorize?response_type=code&scope=profile+history+request_receipt+request&client_id=' + uberAPIData.clientID);
 });
 
 app.get('/auth/uber/callback', function(req, res) {
@@ -44,8 +50,12 @@ app.get('/auth/uber/callback', function(req, res) {
     }
   }, function(error, response, body) {
     body = JSON.parse(body);
-    console.log('body: ', body);
-    console.log('access token: ', body.access_token);
+    req.session.access_token = body.access_token;
+
+    req.session.save(function(err) {
+      console.log('Error: ', err);
+    });
+
     request({
       url:'https://api.uber.com/v1/me',
       method: 'GET',
@@ -57,15 +67,8 @@ app.get('/auth/uber/callback', function(req, res) {
       console.log(body);
     })
 
-    // body.access_token is the access token
-    // save it to db with the user on this session
-    // send accesstoken with every request
     res.redirect('/');
   })
-});
-
-app.get('/', function(req,res){
-  sess = req.session;
 });
 
 app.get('/request-ride', uberHelper.requestRide);

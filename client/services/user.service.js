@@ -1,28 +1,18 @@
 RidemonApp.factory("UserService", ["$http", function($http) {
-  var user;
+  var user = {};
+  var login = function() {
+    var firstInd = document.cookie.indexOf("first_name");
+    if(firstInd > -1) {
+      user.first_name = document.cookie.slice(firstInd).split("=")[1];
+      user.loggedIn = true;
+    }
+  };
+  login();
   return {
     user: user,
-    login: function(userData) {
-      $http.post('/login', userData)
-        .success(function(data, status) {
-          user = data.user;
-        })
-        .error(function(data, status) {
-          console.error(data);
-        });
-    },
     logout: function() {
-      $http.post('/logout')
-        .success(function() {
-          user = null;
-          console.log("Logging out");
-        });
-    },
-    signup: function(userData) {
-      $http.post('/signup', userData)
-        .success(function(data, status) {
-          this.login(data.user);
-        });
+      delete user.first_name;
+      delete user.loggedIn;
     }
   };
 }]);

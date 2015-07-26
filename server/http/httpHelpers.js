@@ -1,5 +1,4 @@
 var request = require('request');
-var token = require('../../server');
 /*
 Ride Request
 
@@ -16,39 +15,40 @@ surge_confirmation_id (optional)  string  The unique identifier of the surge ses
 
 module.exports.requestRide = function(req, res) {
 
+  var token = req.session.access_token;
   // First get uber products for the area of request
-  var latitude = 33,
-      longitude = 123;
+  var latitude = 37,
+      longitude = -122;
 
-  getProducts(latitude, longitude, function(data) {
+  var endLat = 37.5;
+  var endLong = -122.5;
 
+  getProducts(latitude, longitude, token, function(data) {
     console.log(data);
-    res.end();
-  });
-/*
+    var product_id = data.products[0].product_id;
     request({
       url: 'https://sandbox-api.uber.com/v1/requests',
       method: 'POST',
-      qs: {
-        product_id: 33,
-        start_latitude: latitude,
-        start_longitude: longitude,
-        end_latitude: 32,
-        end_longitude: 123
+      json: {
+        'product_id': product_id,
+        'start_latitude': latitude,
+        'start_longitude': longitude,
+        'end_latitude': endLat,
+        'end_longitude': endLong
       },
       headers: {
         'Content-Type': 'application/JSON',
+        'Authorization': 'Bearer ' + token
       }
-    }, function(error, res, body) {
+    }, function(error, response, body) {
       console.log('body:', body);
       console.log('error:', error);
-      response.send(JSON.parse(body));
-    })
+      res.end();
+    });
   });
-*/
 };
 
-var getProducts = function(lat, long, callback) {
+var getProducts = function(lat, long, token, callback) {
   console.log(token);
   request({
     url: 'https://api.uber.com/v1/products',
@@ -62,7 +62,7 @@ var getProducts = function(lat, long, callback) {
       'Authorization': 'Bearer ' + token
     }
   }, function(error, res, body) {
-    callback(body);
+    callback(JSON.parse(body));
   });
 };
 

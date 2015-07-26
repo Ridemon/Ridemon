@@ -92,8 +92,6 @@ app.get('/auth/uber/callback', function(req, res) {
   })
 });
 
-// app.get('/test', pokemonHelper.loadLeaderboard);
-
 app.post('/request-ride', uberHelper.requestRide);
 
 app.get('/pokedex', pokemonHelper.getPokemon);

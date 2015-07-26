@@ -1,6 +1,7 @@
 <header class="center-text">
   <h1>Your Pokedex!</h1>
-  <p>These are the pokemon that you've earned. Enjoy them!</p>
+  <p ng-show="pokemon.length">These are the pokemon that you've earned. Enjoy them!</p>
+  <p ng-show="!pokemon.length">You haven't earned any pokemon yet. You gotta ride if you want to fill up your Pokedex!</p>
 </header>
 
 <hr>

@@ -7,7 +7,7 @@
 
   <a ng-repeat="charity in charityList" href="#" class="list-group-item" ng-click="request.start_address && requestRide(charity)">
     <div>
-      <p class="charities">{{ charity.name }} &nbsp&nbsp | &nbsp&nbsp {{ charity.address }} &nbsp&nbsp | &nbsp&nbsp {{ charity.pokemon }} &nbsp&nbsp <img data-ng-src="http://pokeapi.co/{{ charity.image }}"></img></p>
+      <p class="charities">{{ charity.name }} &nbsp | &nbsp {{ charity.address }} &nbsp | &nbsp {{ charity.pokemon }} &nbsp <img data-ng-src="http://pokeapi.co/{{ charity.image }}"></img></p>
     </div>
   </a>
 </div>

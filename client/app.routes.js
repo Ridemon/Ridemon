@@ -15,10 +15,6 @@ RidemonApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", 
       url: "/about",
       templateUrl: "components/about/about.html"
     })
-    .state("login", {
-      url: "/login",
-      templateUrl: "components/login/login.html"
-    })
     .state("request", {
       url: "/request-ride",
       templateUrl: "components/request/request.html"

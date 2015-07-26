@@ -30,6 +30,12 @@ app.use(express.static('bower_components'));
 
 app.use(bodyParser.json());
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.get('/login', function(req, res) {
   res.redirect('https://login.uber.com/oauth/authorize?response_type=code&scope=profile+history+request_receipt+request&client_id=' + uberAPIData.clientID);
 });
@@ -70,7 +76,7 @@ app.get('/auth/uber/callback', function(req, res) {
   })
 });
 
-app.get('/request-ride', uberHelper.requestRide);
+app.post('/request-ride', uberHelper.requestRide);
 
 app.listen(port, function() { console.log('listening on port ' + port + '...')});
 

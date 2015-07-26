@@ -14,6 +14,7 @@
     "bower": "^1.4.1",
     "connect-firebase": "0.0.8",
     "express": "^4.13.1",
+    "express-session": "^1.11.3",
     "firebase": "^2.2.7",
     "request": "^2.58.0"
   }

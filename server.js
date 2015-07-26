@@ -63,6 +63,8 @@ app.get('/auth/uber/callback', function(req, res) {
     body = JSON.parse(body);
     req.session.access_token = body.access_token;
 
+    console.log(body)
+
     req.session.save(function(err) {
       if(err) {
         console.log('Error: ', err);

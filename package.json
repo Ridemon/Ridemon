@@ -14,8 +14,6 @@
     "bower": "^1.4.1",
     "express": "^4.13.1",
     "firebase": "^2.2.7",
-    "passport": "^0.2.2",
-    "passport-uber": "0.0.1",
     "request": "^2.58.0"
   }
 }

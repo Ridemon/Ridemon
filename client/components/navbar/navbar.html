@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse" ng-controller="NavbarController">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
@@ -15,8 +15,12 @@
         <li ui-sref-active="active"><a href="#" ui-sref="about">About <span class="sr-only">(current)</span></a></li>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/logout">Logout</a></li>
+      <ul class="nav navbar-nav navbar-right" ng-show="loggedIn">
+        <li><a href="#">{{ user.first_name }}</a></li>
+        <li><a href="#" ng-click="logout()">Logout</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" ng-show="!loggedIn">
+        <li><a href="#" ui-sref="login">Login</a></li>
       </ul>
     </div>
   </div>

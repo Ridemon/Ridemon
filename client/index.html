@@ -7,10 +7,13 @@
   <script type="text/javascript" src="angular-ui-router/release/angular-ui-router.min.js"></script>
   <script type="text/javascript" src="app.module.js"></script>
   <script type="text/javascript" src="app.routes.js"></script>
+  <script type="text/javascript" src="services/user.service.js"></script>
+  <script type="text/javascript" src="components/login/user.controller.js"></script>
+  <script type="text/javascript" src="components/navbar/navbar.controller.js"></script>
 </head>
 <body>
 
-<ng-include src="'partials/navbar.html'"></ng-include>
+<ng-include src="'components/navbar/navbar.html'"></ng-include>
 
 <ui-view></ui-view>
 

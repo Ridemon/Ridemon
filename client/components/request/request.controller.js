@@ -67,7 +67,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
       parseAddressToLatLng($scope.request.end_address).then(function(res) {
         end = res;
         rideRequest.data = {};
-        if(!start.lat || !start.lng || !end.lat || end.lng) {
+        if(!start.lat || !start.lng || !end.lat || !end.lng) {
           return new Error("Missing latitude or longitude information");
         }
         rideRequest.data.start_latitude = start.lat;

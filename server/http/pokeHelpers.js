@@ -13,6 +13,7 @@ module.exports.addPokemon = function(req, response) {
 
   var savePokemonId = function() {
     var userId = req.session.userId;
+    console.log("USER ID ", userId);
     var name = req.session.name;
     var setName = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/name/");
     setName.set({
@@ -88,7 +89,7 @@ module.exports.getPokemon = function(req, response) {
             pokemonArray[ind] = data;
             count++;
             if(count === index) {
-              console.log(pokemonArray);
+              // console.log(pokemonArray);
               response.send(pokemonArray);
             }
           });

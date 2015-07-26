@@ -82,6 +82,7 @@ module.exports.getPokemon = function(req, response) {
             pokemonArray[ind] = data;
             count++;
             if(count === index) {
+              console.log(pokemonArray);
               response.send(pokemonArray);
             }
           });

@@ -19,6 +19,10 @@
         <li ui-sref-active="active"><a href="#" ui-sref="pokedex">Visit Your Pokedex <span class="sr-only">(current)</span></a></li>
         </li>
       </ul>
+      <ul class="nav navbar-nav">
+        <li ui-sref-active="active"><a href="#" ui-sref="leaderboard">Checkout the Leaderboard <span class="sr-only">(current)</span></a></li>
+        </li>
+      </ul>
       <ul class="nav navbar-nav navbar-right" ng-show="user.loggedIn">
         <li><a href="#">{{ user.first_name }}</a></li>
         <li><a href="#" ng-click="logout()">Logout</a></li>

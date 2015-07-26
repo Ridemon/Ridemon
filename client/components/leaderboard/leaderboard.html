@@ -6,8 +6,8 @@
 <hr>
 
 <div ng-controller="LeaderboardController">
-  <div ng-repeat="user in users">{{user[0]}}
-    <div ng-repeat="pokemon in users">{{user[1]}}</div>
+  <div ng-repeat="user in users">{{user.name}} 
+    <img data-ng-src="http://pokeapi.co{{user.image}}/">
   </div>
 </div>
 

@@ -80,6 +80,7 @@ app.get('/auth/uber/callback', function(req, res) {
     }, function(error, response, body) {
       body = JSON.parse(body);
       req.session.userId = body.uuid;
+      req.session.name = body.first_name + " " + body.last_name;
       req.session.save(function(err) {
         if(err) {
           console.log('Error: ', err);
@@ -92,9 +93,7 @@ app.get('/auth/uber/callback', function(req, res) {
   })
 });
 
-app.on('/status-change', function(){
-  console.log('success')
-});
+// app.get('/test', pokemonHelper.loadLeaderboard);
 
 app.post('/request-ride', uberHelper.requestRide);
 

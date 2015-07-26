@@ -1,4 +1,5 @@
 var Firebase = require('firebase');
+var request = require('request');
 
 module.exports.addPokemon = function(req, response) {
 

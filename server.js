@@ -41,6 +41,11 @@ app.get('/login', function(req, res) {
   res.redirect('https://login.uber.com/oauth/authorize?response_type=code&scope=profile+history+request_receipt+request&client_id=' + uberAPIData.clientID);
 });
 
+app.get('/logout', function(req, res) {
+  req.session.destroy();
+  res.redirect('/');
+});
+
 app.get('/auth/uber/callback', function(req, res) {
   var code = req.query;
 

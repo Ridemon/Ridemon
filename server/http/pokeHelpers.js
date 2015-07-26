@@ -36,9 +36,10 @@ module.exports.getPokemon = function(req, response) {
       console.log(error);
     }
 
-    body = JSON.parse(body);
-    console.log(body);
-
-    response.end(JSON.stringify(body.pokemonIds));
+    if(body) {
+      response.end(JSON.stringify(body.pokemonIds));
+    } else {
+      response.end(JSON.stringify({pokemonIds: {}}));
+    }
   });
 };

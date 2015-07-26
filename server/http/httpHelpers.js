@@ -24,12 +24,6 @@ module.exports.requestRide = function(req, res) {
   var endLat = req.body.data.end_latitude,
       endLong = req.body.data.end_longitude;
 
-  console.log('req: ', req);
-  console.log('startLat: ', startLat);
-  console.log('startLong: ', startLong);
-  console.log('endLat: ', endLat);
-  console.log('endLong: ', endLong);
-
   if(token === undefined) {
     console.log('Error: user not authenticated');
     res.status(401).end();

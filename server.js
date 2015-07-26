@@ -72,6 +72,11 @@ app.get('/auth/uber/callback', function(req, res) {
       }
     }, function(error, response, body) {
       body = JSON.parse(body);
+      console.log(body.uuid);
+      req.session.userId = body.uuid;
+      req.session.save(function(err) {
+        console.log('Error: ', err);
+      })
       res.cookie('first_name', body.first_name);
       res.redirect('/');
     });

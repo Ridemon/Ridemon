@@ -12,7 +12,8 @@ module.exports.requestPokemon = function(req, response) {
   var timeInMs = Date.now();
 
   var savePokemonId = function() {
-    var userId = 1;
+    var userId = req.session.userId;
+    console.log(req.session);
     var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
     myFirebaseRef.set({
       caught: timeInMs

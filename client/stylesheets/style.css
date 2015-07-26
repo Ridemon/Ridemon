@@ -1,0 +1,18 @@
+.container-boxed-sm {
+  height: 200px;
+  border: 2px solid gray;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 15px;
+  margin-top: 50px;
+}
+
+.img-sm-overlay-right {
+  position: absolute;
+  top: -60px; 
+  left: 75%;
+}
+
+.center-text {
+  text-align: center;
+}

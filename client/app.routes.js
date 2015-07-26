@@ -3,9 +3,9 @@ RidemonApp.config(["$stateProvider", "$urlRouterProvider", function($stateProvid
   $urlRouterProvider.otherwise("/");
 
   $stateProvider
-    .state("home", {
+    .state("requestRide", {
       url: "/",
-      templateUrl: "components/home/home.html"
+      templateUrl: "components/request/request.html"
     })
     .state("pokedex", {
       url: "/pokedex",

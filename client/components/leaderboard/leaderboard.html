@@ -6,6 +6,8 @@
 <hr>
 
 <div ng-controller="LeaderboardController">
-  Hello!
+  <div ng-repeat="user in users">{{user[0]}}
+    <div ng-repeat="pokemon in users">{{user[1]}}</div>
+  </div>
 </div>
 

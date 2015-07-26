@@ -23,8 +23,7 @@ RidemonApp.config(["$stateProvider", "$urlRouterProvider", function($stateProvid
     })
     .state("leaderboard", {
       url: "/leaderboard",
-      templateUrl: "components/leaderboard/leaderboard.html",
-      data: redirectToLogin
+      templateUrl: "components/leaderboard/leaderboard.html"
     })
     .state("about", {
       url: "/about",

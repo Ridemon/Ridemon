@@ -2,12 +2,21 @@
 <html ng-app="RidemonApp">
 <head>
   <title>Ridemon</title>
-  <script type="text/javascript" src="angular/angular.min.js"></script>
-  <script type="text/javascript" src="angular-ui-router/release/angular-ui-router.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.2.5/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
   <script type="text/javascript" src="app.module.js"></script>
   <script type="text/javascript" src="app.routes.js"></script>
+  <script type="text/javascript" src="services/user.service.js"></script>
+  <script type="text/javascript" src="components/login/user.controller.js"></script>
+  <script type="text/javascript" src="components/navbar/navbar.controller.js"></script>
+  <script type="text/javascript" src="./components/pokedex/pokedex.controller.js"></script>
 </head>
 <body>
+
+<ng-include src="'components/navbar/navbar.html'"></ng-include>
 
 <ui-view></ui-view>
 

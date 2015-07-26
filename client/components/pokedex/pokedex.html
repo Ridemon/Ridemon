@@ -15,14 +15,21 @@
         <tbody>
           <tr>
             <td>Name:</td>
-            <td ng-mouseover="readToMe(pokemon.pokemon.name)"><strong>{{ capitalize(pokemon.pokemon.name) }}</strong></td>
+            <td ng-mouseover="readToMe(pokemon.name)"><strong>{{ pokemon.name }}</strong></td>
           </tr>
           <tr>
             <td>Captured:</td>
             <td>{{ pokemon.captured_date }}</td>
           </tr>
           <tr>
-            <td colspan="2">{{ pokemon.description }}</td>
+            <td>Abilities:</td>
+            <td>
+              <p ng-repeat="ability in pokemon.abilities">{{ ability.name }}</p>
+            </td>
+          </tr>
+          <tr>
+            <td>Evolves to:</td>
+            <td>{{ pokemon.evolvesTo }}</td>
           </tr>
         </tbody>
       </table>

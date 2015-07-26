@@ -52,3 +52,9 @@
   width: 250px;
   margin: 15px;
 }
+
+.pokedex {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -31,7 +31,6 @@ app.use(express.static('bower_components'));
 app.use(bodyParser.json());
 
 app.get('/login', function(req, res) {
-  console.log(req.session);
   res.redirect('https://login.uber.com/oauth/authorize?response_type=code&scope=profile+history+request_receipt+request&client_id=' + uberAPIData.clientID);
 });
 

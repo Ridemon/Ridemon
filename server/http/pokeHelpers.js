@@ -1,7 +1,7 @@
 var Firebase = require('firebase');
 var request = require('request');
 
-module.exports.requestPokemon = function(req, response) {
+module.exports.addPokemon = function(req, response) {
 
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -23,3 +23,22 @@ module.exports.requestPokemon = function(req, response) {
   response.end()
 };
 
+module.exports.getPokemon = function(req, response) {
+  var userId = req.session.userId;
+  //var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
+  var pokemonArray = [];
+
+  request({
+    url: 'https://ridemon.firebaseio.com/users/userIds/' + userId + '.json',
+    method: 'GET'
+  }, function(error, res, body) {
+    if (error) {
+      console.log(error);
+    }
+
+    body = JSON.parse(body);
+    console.log(body);
+
+    response.end(JSON.stringify(body.pokemonIds));
+  });
+};

@@ -1,4 +1,6 @@
 var request = require('request');
+var pokemonHelper = require('./pokeHelpers.js');
+
 /*
 Ride Request
 
@@ -14,7 +16,6 @@ surge_confirmation_id (optional)  string  The unique identifier of the surge ses
 */
 
 module.exports.requestRide = function(req, res) {
-
   var token = req.session.access_token;
 
   // First get uber products for the area of request
@@ -24,14 +25,12 @@ module.exports.requestRide = function(req, res) {
   var endLat = req.body.data.end_latitude,
       endLong = req.body.data.end_longitude;
 
-  console.log(startLat, startLong, endLat, endLong);
-
   if(token === undefined) {
     console.log('Error: user not authenticated');
     res.status(401).end();
   } else {
     getProducts(startLat, startLong, token, function(data) {
-      if (data.products[0].length > 0) {
+      if (data.products.length > 0) {
         var product_id = data.products[0].product_id;
         request({
           url: 'https://sandbox-api.uber.com/v1/requests',
@@ -52,18 +51,17 @@ module.exports.requestRide = function(req, res) {
           if(error) {
             console.log('error:', error);
           }
+          pokemonHelper.addPokemon(req, res);
           res.end();
         });
       } else {
-        res.status(400).end();
+        res.status(400).send();
       }
   });
   }
 };
 
 var getProducts = function(lat, long, token, callback) {
-  console.log("Token", token)
-  console.log("lat", lat, "long", long);
   request({
     url: 'https://api.uber.com/v1/products',
     method: 'GET',

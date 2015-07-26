@@ -11,9 +11,6 @@ RidemonApp.controller('LeaderboardController', ['$scope', '$firebase', '$firebas
       specialUid: userId
     }}).success(function(data) {
       user.Uid = userId;
-      user.pokemon = data.map(function(info) {
-        return info.name;
-      }).join(", ");
       user.count = 0;
       for(var i in user.pokemonIds) {
         user.count++;

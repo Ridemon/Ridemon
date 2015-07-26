@@ -13,6 +13,7 @@ RidemonApp.factory("UserService", ["$http", function($http) {
     logout: function() {
       delete user.first_name;
       delete user.loggedIn;
+      document.cookie="first_name='';expires=" + new Date(0).toGMTString();
     }
   };
 }]);

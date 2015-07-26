@@ -1,0 +1,15 @@
+<div class="list-group">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Take a ride to these charities to earn rare Pokemon for your collection!</h3>
+    </div>
+    <div class="panel-body">
+
+  <a ng-repeat="charity in charityList" href="#" class="list-group-item" ng-click="request.start_address && requestRide(charity)">
+    <div>
+      <p class="charities">{{ charity.name }} &nbsp&nbsp | &nbsp&nbsp {{ charity.address }} &nbsp&nbsp | &nbsp&nbsp {{ charity.pokemon }} &nbsp&nbsp <img data-ng-src="http://pokeapi.co/{{ charity.image }}"></img></p>
+    </div>
+  </a>
+</div>
+  </div>
+</div>

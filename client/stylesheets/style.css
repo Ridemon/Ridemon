@@ -9,7 +9,7 @@
 
 .img-sm-overlay-right {
   position: absolute;
-  top: -60px; 
+  top: -60px;
   left: 75%;
 }
 
@@ -25,4 +25,26 @@
   max-width: 100px;
   float: left;
   border-radius: 20%;
+}
+
+.list-group-item {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.charities {
+  text-align: center;
+  font-weight: bold;
+}
+
+.panel-title {
+  text-align: center;
+}
+
+.panel-primary {
+  margin-top: 20px;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
 }

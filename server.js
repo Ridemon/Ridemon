@@ -6,6 +6,7 @@ var uberStrategy = require('passport-uber');
 var uberAPIData = require('./server/config/config');
 var firebase = require('./server/db/dbHelper');
 var uberHelper = require('./server/http/httpHelpers');
+var pokemonHelper = require('./server/http/pokeHelpers')
 
 var session = require('express-session');
 
@@ -77,6 +78,10 @@ app.get('/auth/uber/callback', function(req, res) {
 });
 
 app.post('/request-ride', uberHelper.requestRide);
+
+app.get('/pokedex', pokemonHelper.requestPokemon);
+// Listener for the uber web hook.
+// app.on('uber ride complete hook', pokemonHelper.requestPokemon);
 
 app.listen(port, function() { console.log('listening on port ' + port + '...')});
 

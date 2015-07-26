@@ -18,6 +18,10 @@ RidemonApp.config(["$stateProvider", "$urlRouterProvider", function($stateProvid
     .state("login", {
       url: "/login",
       templateUrl: "components/login/login.html"
+    })
+    .state("request", {
+      url: "/request-ride",
+      templateUrl: "components/request/request.html"
     });
 
 }]);

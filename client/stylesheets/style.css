@@ -42,8 +42,19 @@
 }
 
 .panel-primary {
-  margin-top: 20px;
-  width: 75%;
+  margin-top: 70px;
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.uberlogo {
+  width: 250px;
+  margin: 15px;
+}
+
+.pokedex {
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
 }

@@ -1,6 +1,6 @@
 <div ng-controller="PokedexController">
   <header class="center-text">
-    <h1>Your Pokedex!</h1>
+    <div class="pokedex"><h1><img data-ng-src="./components/pokedex/pokedex.png">Your Pokedex!</img></h1><div>
     <p id="pokemon-message">{{ pokemon.message }}</p>
   </header>
 
@@ -8,7 +8,7 @@
 
   <div>
     <div class="pokemon" ng-repeat="pokemon in pokemon.pokemon">
-      <div class="container-boxed-sm col-lg-2">
+      <div class="container-boxed-sm col-lg-2 col-md-4 col-sm-3">
         <div>
           <img class="img-sm-overlay-right" data-ng-src="http://pokeapi.co{{ pokemon.image }}/">
         </div>

@@ -6,7 +6,7 @@
 <hr>
 
 <div ng-controller="LeaderboardController">
-  <div ng-repeat="user in users">{{user.name}} 
+  <div ng-repeat="user in userArray">{{user.name.name}} 
     <img data-ng-src="http://pokeapi.co{{user.image}}/">
   </div>
 </div>

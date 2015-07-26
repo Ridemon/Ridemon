@@ -1,6 +1,6 @@
 RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($scope, $http, $q) {
   $scope.current = {};
-  
+
   $scope.reset = function() {
     $scope.request = {};
     $scope.cancel();
@@ -15,10 +15,50 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
     $scope.request.start_address = $scope.current.address;
   };
 
-  $scope.requestRide = function() {
+  $scope.charityList = [
+    {
+      name: 'St. Anthony Foundation',
+      address: '150 Golden Gate Ave. San Francisco, CA 94102',
+      pokemon: 'MewTwo',
+      pokemonID: 151
+    },
+    {
+      name: 'SF-Marin Food Bank',
+      address: '900 Pennsylvania Ave. San Francisco, CA  94107',
+      pokemon: 'Articuno',
+      pokemonID: 145
+    },
+    {
+      name: 'SF SPCA Pet Adoption Center',
+      address: '250 Florida Street San Francisco CA 94103',
+      pokemon: 'Zapdos',
+      pokemonID: 146
+    },
+    {
+      name: 'HandsOn Bay Area',
+      address: '1504 Bryant Street, San Francisco, CA 94103',
+      pokemon: 'Moltres',
+      pokemonID: 147
+    },
+  ];
+
+  $scope.charityList.forEach(function(charity) {
+    $http.get("http://pokeapi.co/api/v1/sprite/" + charity.pokemonID)
+        .success(function(data) {
+          charity.image = data.image;
+      });
+  });
+
+  $scope.requestRide = function(charity) {
+    var start, end;
+
+    if(charity && charity.address) {
+      $scope.request.destination = charity.address;
+      $scope.request.end_address = charity.address;
+    }
+
     $scope.message = "";
     $scope.cleanSlate = false;
-    var start, end;
     var rideRequest = {};
     parseAddressToLatLng($scope.request.start_address).then(function(res) {
       start = res;

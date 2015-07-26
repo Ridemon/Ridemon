@@ -84,15 +84,15 @@ module.exports.getPokemon = function(req, response) {
       var index = 0, count = 0;
       for(var pokemonId in pokemonIds) {
         +(function(ind) {
-          getOnePokemon(pokemonId, function(data) {
-            data.caught = timeSince(pokemonIds[pokemonId].caught);
-            pokemonArray[ind] = data;
+          getOnePokemon(ind, function(data) {
+            data.caught = timeSince(pokemonIds[ind].caught) + ' ago';
+            pokemonArray[count] = data;
             count++;
             if(count === index) {
               response.send(pokemonArray);
             }
           });
-        })(index);
+        })(pokemonId);
         index++;
       }
     } else {

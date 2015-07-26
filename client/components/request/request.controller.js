@@ -20,9 +20,6 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
         rideRequest.data.end_latitude = end.lat;
         rideRequest.data.end_longitude = end.lng;
         $http.post("/request-ride", rideRequest)
-          .success(function(data) {
-            // TODO: redirect to confirmation page?
-          })
           .error(function(data) {
             $scope.message = "We're sorry! Something went wrong. Please try again.";
           });
@@ -32,7 +29,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
 
   var parseAddressToLatLng = function(address) {
     return $q(function(resolve, reject) {
-      $http.get("http://maps.googleapis.com/maps/api/geocode/json?address=" + address)
+      $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + address)
         .then(resolve);
     }).then(function(data) {
         return data.data.results[0].geometry.location;
@@ -43,7 +40,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
   navigator.geolocation.getCurrentPosition(
     // Geolocation allowed
     function(position) {
-      $http.get("http://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude)
+      $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude)
         .success(function(data) {
           $scope.current.address = data.results[0].formatted_address;
         })
@@ -51,7 +48,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
     // TODO: Handle geolocation failure/disallowal
     // Geolocation failed
     function() {
-
+      $scope.message = "Geolocation appears to be disabled in your browser. Please enable to use this feature.";
     }
   );
 }]);

@@ -1,15 +1,27 @@
-<header class="center-text">
-  <h1>The Leaders!</h1>
-  <p ng-show="pokemon.length">These are the best collectors in town!</p>
-</header>
+<div class="container">
+  <div class="col-lg-10 well bs-component">
+    <header class="center-text">
+      <h1>The Leaderboard</h1>
+      <p>{{userArray}}</p>
+      <p ng-show="userArray.length">These are the best collectors in town!</p>
+    </header>
 
-<hr>
-
-<div ng-controller="LeaderboardController">
-  <ol>
-    <li ng-repeat="user in userArray">{{user.name.name}}
-      <img data-ng-src="http://pokeapi.co{{pokemon.image}}/">
-    </li>
-  </ol>
+    <div ng-controller="LeaderboardController">
+      <table class="table table-striped table-hover">
+        <thead>
+          <th>
+            <td><strong>Name</strong></td>
+            <td><strong>Pokecount</strong></td>
+          </th>
+        </thead>
+        <tbody>
+          <tr ng-repeat="user in userArray track by $index">
+            <td>{{$index + 1}}. </td>
+            <td>{{user.name.name}}</td>
+            <td>{{user.count}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-

@@ -15,7 +15,7 @@ RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', '$http'
   };
 
   $scope.pokemon = [];
-  // TODO: get actual pokemon ids. Looking for an array of pokemon objects, 
+  // TODO: get actual pokemon ids. Looking for an array of pokemon objects,
   // with name, captured_date, description, and image properties.
 
   var getPokemon = function(pokeId) {
@@ -23,7 +23,9 @@ RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', '$http'
     $http.get("http://pokeapi.co/api/v1/pokemon/" + pokeId)
       .success(function(data) {
         pokey.abilities = data.abilities;
-        pokey.evolvesTo = data.evolutions[0].to;
+        if(data.evolutions.length > 0){
+          pokey.evolvesTo = data.evolutions[0].to;
+        }
         $http.get("http://pokeapi.co/api/v1/sprite/" + pokeId)
           .success(function(data) {
             pokey.name = capitalize(data.pokemon.name);
@@ -33,13 +35,44 @@ RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', '$http'
     return pokey;
   };
 
-  // Stubbed out pokemon ids:
-  var pokemonIds = [1,2,3,4,5,6,7,8,9,10,11,56];
-  pokemonIds.forEach(function(pokemonId, ind) {
-    $scope.pokemon[ind] = getPokemon(pokemonId);
-  })
+  var pokemonIds = [];
 
-
-
+  $http.get('http://localhost:3333/pokedex')
+    .success(function(pokemon) {
+      console.log(pokemon);
+      for(var pokemonId in pokemon) {
+        var newPokemon = getPokemon(pokemonId);
+        newPokemon.caught = timeSince(pokemon[pokemonId].caught) + ' ago';
+        $scope.pokemon.push(newPokemon);
+      }
+    });
 
 }]);
+
+function timeSince(date) {
+
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = Math.floor(seconds / 31536000);
+
+    if (interval > 1) {
+        return interval + " years";
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+        return interval + " months";
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+        return interval + " days";
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+        return interval + " hours";
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+        return interval + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+}

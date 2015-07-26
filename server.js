@@ -87,7 +87,8 @@ app.get('/auth/uber/callback', function(req, res) {
 
 app.post('/request-ride', uberHelper.requestRide);
 
-app.get('/pokedex', pokemonHelper.requestPokemon);
+app.get('/pokedex', pokemonHelper.getPokemon);
+app.get('/addPokemon', pokemonHelper.addPokemon);
 // Listener for the uber web hook.
 // app.on('uber ride complete hook', pokemonHelper.requestPokemon);
 

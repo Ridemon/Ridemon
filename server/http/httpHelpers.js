@@ -25,6 +25,8 @@ module.exports.requestRide = function(req, res) {
   var endLat = req.body.data.end_latitude,
       endLong = req.body.data.end_longitude;
 
+  var legendary = req.body.data.legendary;
+
   if(token === undefined) {
     console.log('Error: user not authenticated');
     res.status(401).end();
@@ -51,7 +53,13 @@ module.exports.requestRide = function(req, res) {
           if(error) {
             console.log('error:', error);
           }
-          pokemonHelper.addPokemon(req, res);
+
+          if(legendary === false) {
+            pokemonHelper.addPokemon(req, res);
+          } else {
+            pokemonHelper.addLegendary(req, res, legendary);
+          }
+
           res.end();
         });
       } else {

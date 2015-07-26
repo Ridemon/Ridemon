@@ -6,7 +6,7 @@ module.exports.addPokemon = function(req, response) {
     return Math.floor(Math.random() * (max - min)) + min;
   };
 
-  var pokemonId = getRandomInt(1, 151);
+  var pokemonId = getRandomInt(1, 145);
 
   var timeInMs = Date.now();
 
@@ -20,6 +20,14 @@ module.exports.addPokemon = function(req, response) {
 
   savePokemonId();
   response.end()
+};
+
+module.exports.addLegendary = function(req, response, pokemonId) {
+  var userId = req.session.userId;
+  var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
+  myFirebaseRef.set({
+    caught: Date.now()
+  });
 };
 
 var capitalize = function(word) {
@@ -64,14 +72,14 @@ module.exports.getPokemon = function(req, response) {
     if (error) {
       console.log(error);
     }
-    
+
     if(JSON.parse(body)) {
       var pokemonIds = JSON.parse(body).pokemonIds;
       var index = 0, count = 0;
       for(var pokemonId in pokemonIds) {
         +(function(ind) {
           getOnePokemon(pokemonId, function(data) {
-            pokemonArray[ind] = data;    
+            pokemonArray[ind] = data;
             count++;
             if(count === index) {
               response.send(pokemonArray);

@@ -51,10 +51,12 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
 
   $scope.requestRide = function(charity) {
     var start, end;
+    var legendary = false;
 
     if(charity && charity.address) {
       $scope.request.destination = charity.address;
       $scope.request.end_address = charity.address;
+      legendary = charity.pokemonID;
     }
 
     $scope.message = "";
@@ -69,6 +71,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
         rideRequest.data.start_longitude = start.lng;
         rideRequest.data.end_latitude = end.lat;
         rideRequest.data.end_longitude = end.lng;
+        rideRequest.data.legendary = legendary;
         $http.post("/request-ride", rideRequest)
           .error(function(data) {
             if(!$scope.message) {

@@ -29,7 +29,7 @@ RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', '$http'
             pokey.name = capitalize(data.pokemon.name);
             pokey.image = data.image;
           });
-      })
+      });
     return pokey;
   };
 

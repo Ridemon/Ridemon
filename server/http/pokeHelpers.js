@@ -1,4 +1,5 @@
 var Firebase = require('firebase');
+var request = require('request');
 
 module.exports.requestPokemon = function(req, response) {
 
@@ -19,5 +20,6 @@ module.exports.requestPokemon = function(req, response) {
   };
 
   savePokemonId();
+  response.end()
 };
 

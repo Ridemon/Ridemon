@@ -29,7 +29,6 @@ module.exports.requestRide = function(req, res) {
     res.status(401).end();
   } else {
     getProducts(startLat, startLong, token, function(data) {
-      console.log(data);
       var product_id = data.products[0].product_id;
       request({
         url: 'https://sandbox-api.uber.com/v1/requests',

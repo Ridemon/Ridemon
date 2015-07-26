@@ -21,6 +21,10 @@ RidemonApp.config(["$stateProvider", "$urlRouterProvider", function($stateProvid
       templateUrl: "components/pokedex/pokedex.html",
       data: redirectToLogin
     })
+    .state("leaderboard", {
+      url: "/leaderboard",
+      templateUrl: "components/leaderboard/leaderboard.html"
+    })
     .state("about", {
       url: "/about",
       templateUrl: "components/about/about.html"

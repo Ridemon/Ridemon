@@ -1,6 +1,6 @@
 {
   "firebase": "ridemon",
-  "public": "client",
+  "public": "./",
   "ignore": [
     "firebase.json",
     "**/.*",

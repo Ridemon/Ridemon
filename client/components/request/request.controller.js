@@ -76,6 +76,9 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
         rideRequest.data.end_longitude = end.lng;
         rideRequest.data.legendary = legendary;
         $http.post("/request-ride", rideRequest)
+          .success(function(data, status, headers, config){
+
+          })
           .error(function(data) {
             if(!$scope.message) {
               $scope.message = "We're sorry! Something went wrong. Please try again.";

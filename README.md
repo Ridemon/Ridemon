@@ -1,3 +1,8 @@
+#Ridemon#
+Catch Pokemon by riding Uber
+
+###This app was created during a 24-hour Hackathon###
+
 ##Client-Server Interface##
 
 Submitting POST Request for new ride

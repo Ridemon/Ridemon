@@ -55,7 +55,7 @@ var getOnePokemon = function(pokeId, callback) {
       pokey.evolvesTo = data.evolutions[0].to;
     }
     request({
-      url: "http://pokeapi.co/api/v1/sprite/" + pokeId,
+      url: "http://pokeapi.co/api/v1/sprite/" + (++pokeId),
       method: "GET"
     }, function(error, res, data) {
       data = JSON.parse(data);

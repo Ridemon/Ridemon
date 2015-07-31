@@ -42,7 +42,7 @@ module.exports.addPokemon = function(req, response) {
 // not very DRY
 module.exports.addLegendary = function(req, response, pokemonId) {
   var userId = req.session.userId;
-  var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
+  var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + (++pokemonId) + "/");
   myFirebaseRef.set({
     caught: Date.now()
   });
@@ -67,7 +67,7 @@ var getOnePokemon = function(pokeId, callback) {
       pokey.evolvesTo = data.evolutions[0].to;
     }
     request({
-      url: "http://pokeapi.co/api/v1/sprite/" + (++pokeId),
+      url: "http://pokeapi.co/api/v1/sprite/" + pokeId,
       method: "GET"
     }, function(error, res, data) {
       data = JSON.parse(data);

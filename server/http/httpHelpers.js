@@ -1,38 +1,30 @@
 var request = require('request');
 var pokemonHelper = require('./pokeHelpers.js');
 
-/*
-Ride Request
-
-POST PARAMETERS
-
-Name                  Type     Description
-product_id            string  The unique ID of the product being requested.
-start_latitude        float   The beginning or "pickup" latitude.
-start_longitude       float   The beginning or "pickup" longitude.
-end_latitude          float   The final or destination latitude.
-end_longitude         float   The final or destination longitude.
-surge_confirmation_id (optional)  string  The unique identifier of the surge session for a user. Required when returned from a 409 Conflict response on previous POST attempt.
-*/
-
 module.exports.requestRide = function(req, res) {
   var token = req.session.access_token;
 
   // First get uber products for the area of request
-  var startLat = req.body.data.start_latitude,
-      startLong = req.body.data.start_longitude;
+  var startLat  = req.body.data.start_latitude,
+      startLong = req.body.data.start_longitude,
+      endLat    = req.body.data.end_latitude,
+      endLong   = req.body.data.end_longitude;
 
-  var endLat = req.body.data.end_latitude,
-      endLong = req.body.data.end_longitude;
-
+  // Get legendary ID if there's a legendary in the request
   var legendary = req.body.data.legendary;
 
+  // User is not logged in if there is no token
   if(token === undefined) {
     console.log('Error: user not authenticated');
     res.status(401).end();
   } else {
+    // Make request for available products to obtain ID in order to request ride
     getProducts(startLat, startLong, token, function(data) {
-      if (data.products.length > 0) {
+      // If products array is empty, there are no Uber rides available at that location
+      if (data.products.length === 0) {
+        res.status(400).send();
+      } else {
+        // Use first product ID which is for basic Uber to make ride request
         var product_id = data.products[0].product_id;
         request({
           url: 'https://sandbox-api.uber.com/v1/requests',
@@ -48,21 +40,18 @@ module.exports.requestRide = function(req, res) {
             'Content-Type': 'application/JSON',
             'Authorization': 'Bearer ' + token
           }
-
         }, function(error, response, body) {
           if(error) {
             console.log('error:', error);
           }
+          // Make call to pokemon API to get new pokemon for the user
           if(legendary === false) {
             pokemonHelper.addPokemon(req, res);
           } else {
             pokemonHelper.addLegendary(req, res, legendary);
           }
-
           res.end();
         });
-      } else {
-        res.status(400).send();
       }
   });
   }

@@ -41,20 +41,44 @@ module.exports.requestRide = function(req, res) {
             'Authorization': 'Bearer ' + token
           }
         }, function(error, response, body) {
+          var map;  // variable to store map url for sending back to client
+
           if(error) {
             console.log('error:', error);
           }
+
           // Make call to pokemon API to get new pokemon for the user
           if(legendary === false) {
             pokemonHelper.addPokemon(req, res);
           } else {
             pokemonHelper.addLegendary(req, res, legendary);
           }
-          res.end();
+
+          // Get map
+          getMap(body.request_id, token, function(mapURL) {
+            console.log("map url: ", mapURL);
+            map = mapURL;
+
+            console.log(body);
+            res.send(map);
+          });
         });
       }
   });
   }
+};
+
+var getMap = function(request_id, token, callback) {
+  request({
+    url: 'https://sandbox-api.uber.com/v1/requests/' + request_id + '/map',
+    method: 'GET',
+    headers: {
+    'Content-Type': 'application/JSON',
+    'Authorization': 'Bearer ' + token
+    }
+  }, function(error, response, body) {
+    callback(JSON.parse(body).href);
+  });
 };
 
 var getProducts = function(lat, long, token, callback) {

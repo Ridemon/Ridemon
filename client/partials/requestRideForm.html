@@ -1,0 +1,26 @@
+<form name="requestRideForm" novalidate class="form-horizontal" ng-submit="requestRide()" ng-show="!mapURL">
+  <fieldset>
+    <legend>Request a Ride with <img class="uberlogo" data-ng-src="./components/request/Uber-Logo-Large.png"></img></legend>
+    <div class="form-group">
+      <label for="start" class="col-lg-2 control-label">Starting Address</label>
+      <div class="col-lg-7">
+        <input type="text" class="form-control" id="start" ng-model="request.start_address" placeholder="Starting Address" ng-disabled="!cleanSlate" required>
+      </div>
+      <div class="col-lg-3">
+        <button type="button" class="btn btn-default" ng-click="useCurrentLocation()" ng-disabled="!current.address || !cleanSlate">Use My Current Location</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="destination" class="col-lg-2 control-label">Destination</label>
+      <div class="col-lg-10">
+        <input type="text" class="form-control" id="destination" ng-model="request.destination" placeholder="Ending Address" ng-disabled="!cleanSlate" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-10 col-lg-offset-2">
+        <button type="button" ng-click="reset()" class="btn btn-default">Reset Form</button>
+        <button type="submit" class="btn btn-primary" ng-disabled="requestRideForm.$invalid || !cleanSlate">Request Your Ride</button>
+      </div>
+    </div>
+  </fieldset>
+</form>

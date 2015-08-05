@@ -15,22 +15,22 @@ module.exports.addPokemon = function(req, response) {
   // Get random base pokemon
   var pokemonId = availablePokemon[getRandomInt(1, availablePokemon.length - 1)];
 
-  // Time pokemon was caught
-  var timeInMs = Date.now();
-
-  // Save pokemon to Firebase with time caught
   var savePokemonId = function() {
-    var userId = req.session.userId;  // Store pokemon data by userID
-    var name = req.session.name;      // Store user's name
-    // Access or create user
-    var setName = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/name/");
-    setName.set({
-      name: name
+    var userId = req.session.userId;
+    var pokemonIds = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
+    pokemonIds.set({
+      caught: Date.now()
     });
-    // Save pokemon info into db under appropriate userID
-    var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
-    myFirebaseRef.set({
-      caught: timeInMs
+    //This chunk of code updates the current total amount of pokemon
+    var pokemonCounter = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
+    pokemonCounter.child('pokemonCount').once("value", function(snapshot) {
+      var currentNumber = snapshot.val();
+      currentNumber++;
+      pokemonCounter.update({
+        pokemonCount: currentNumber
+      })
+    }, function (errorObject) {
+      console.log("the read failed: " + errorObject.code);
     });
   };
 
@@ -42,7 +42,7 @@ module.exports.addPokemon = function(req, response) {
 // not very DRY
 module.exports.addLegendary = function(req, response, pokemonId) {
   var userId = req.session.userId;
-  var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + (++pokemonId) + "/");
+  var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + (--pokemonId) + "/");
   myFirebaseRef.set({
     caught: Date.now()
   });
@@ -67,7 +67,7 @@ var getOnePokemon = function(pokeId, callback) {
       pokey.evolvesTo = data.evolutions[0].to;
     }
     request({
-      url: "http://pokeapi.co/api/v1/sprite/" + pokeId,
+      url: "http://pokeapi.co/api/v1/sprite/" + (++pokeId),
       method: "GET"
     }, function(error, res, data) {
       data = JSON.parse(data);

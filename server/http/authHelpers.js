@@ -1,7 +1,30 @@
 // Authentication helper functions
+var Firebase = require('firebase');
 var request = require('request');
 var session = require('express-session');
 var config = require('../config/config');
+
+var setNewUserInfo = function(userId, exists, userName) {
+  if (exists) {
+    console.log("Welcome back ", userName);
+  } else {
+    console.log("Now inserting into the database");
+    var newUser = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
+    newUser.set({
+      name: userName,
+      pokemonCount: 0
+    })
+  }
+}
+
+var checkIfUserExists = function(userId, userName) {
+  var usersRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/");
+  usersRef.child(userId).once('value', function(snapshot) {
+    var exists = (snapshot.val() !== null);
+    setNewUserInfo(userId, exists, userName);
+  });
+}
+
 
 module.exports.login = function(req, res) {
   // Redirect to uber login page
@@ -26,7 +49,6 @@ module.exports.callback = function(req, res) {
     body = JSON.parse(body);
     // Save access token to the session so it's sent with every request to Uber
     req.session.access_token = body.access_token;
-
     req.session.save(function(err) {
       if(err) {
         console.log('Error: ', err);
@@ -49,6 +71,7 @@ module.exports.callback = function(req, res) {
         if(err) {
           console.log('Error: ', err);
         }
+        checkIfUserExists(req.session.userId, req.session.name);
       });
 
       // Store first name in cookie to display name in nav bar

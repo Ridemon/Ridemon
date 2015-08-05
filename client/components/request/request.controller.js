@@ -77,7 +77,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
         rideRequest.data.legendary = legendary;
         $http.post("/request-ride", rideRequest)
           .success(function(data, status, headers, config){
-
+            console.log(data);
           })
           .error(function(data) {
             if(!$scope.message) {

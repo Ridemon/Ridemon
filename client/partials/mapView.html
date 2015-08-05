@@ -1,0 +1,9 @@
+<div class="panel panel-info panel-primary" ng-show="mapURL">
+  <div class="panel-heading">
+    <h3 class="panel-title">Your uber is on the way</h3>
+  </div>
+  <div class="panel-body">
+    <iframe id="map-view" type="text/html" ng-src="{{ trustSrc(mapURL) }}"></iframe>
+
+  </div>
+</div>

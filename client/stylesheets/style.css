@@ -58,3 +58,8 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.map-view {
+  width: 90%;
+  height: 90%;
+}

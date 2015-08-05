@@ -1,18 +1,24 @@
-RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($scope, $http, $q) {
+RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", function($scope, $http, $q, $sce) {
   $scope.current = {};
 
   $scope.reset = function() {
     $scope.request = {};
     $scope.cancel();
     $scope.message = "";
+    $scope.mapURL = "";
   };
 
   $scope.cancel = function() {
+    $scope.mapURL = "";
     $scope.cleanSlate = true;
   };
 
   $scope.useCurrentLocation = function() {
     $scope.request.start_address = $scope.current.address;
+  };
+
+  $scope.showMap = function(mapURL) {
+    $scope.mapURL = mapURL;
   };
 
   $scope.charityList = [
@@ -77,7 +83,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
         rideRequest.data.legendary = legendary;
         $http.post("/request-ride", rideRequest)
           .success(function(data, status, headers, config){
-            console.log(data);
+            $scope.showMap(data);
           })
           .error(function(data) {
             if(!$scope.message) {
@@ -128,4 +134,8 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
       $scope.message = "Geolocation appears to be disabled in your browser. Please enable to use this feature.";
     }
   );
+
+  $scope.trustSrc = function(src) {
+    return $sce.trustAsResourceUrl(src);
+  };
 }]);

@@ -21,7 +21,7 @@ module.exports.addPokemon = function(req, response) {
     pokemonIds.set({
       caught: Date.now()
     });
-    //This chunk of code updates the current total amount of pokemon
+    // This chunk of code updates the current total amount of pokemon
     var pokemonCounter = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
     pokemonCounter.child('pokemonCount').once("value", function(snapshot) {
       var currentNumber = snapshot.val();
@@ -45,6 +45,16 @@ module.exports.addLegendary = function(req, response, pokemonId) {
   var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + (--pokemonId) + "/");
   myFirebaseRef.set({
     caught: Date.now()
+  });
+  var pokemonCounter = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
+  pokemonCounter.child('pokemonCount').once("value", function(snapshot) {
+    var currentNumber = snapshot.val();
+    currentNumber++;
+    pokemonCounter.update({
+      pokemonCount: currentNumber
+    })
+  }, function (errorObject) {
+    console.log("the read failed: " + errorObject.code);
   });
 };
 

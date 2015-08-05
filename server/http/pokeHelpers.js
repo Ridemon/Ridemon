@@ -6,6 +6,19 @@ var availablePokemon = [
   1,4,7,10,13,16,19,21,23,25,27,29,32,35,37,39,41,43,46,48,50,52,54,56,58,60,63,66,69,72,74,77,79,81,83,84,86,88,90,92,95,96,98,100,102,104,106,107,108,109,111,113,114,115,116,118,120,122,123,124,125,126,127,128,129,131,132,133 /*Eevee has several possible evolutions to consider*/,137,138,140,142,143,147
 ];
 
+// var incrementPokemon = function(req) {
+//   var pokemonCounter = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + req.session.userId);
+//   pokemonCounter.child('pokemonCount').once("value", function(snapshot) {
+//     var currentNumber = snapshot.val();
+//     currentNumber++;
+//     pokemonCounter.update({
+//       pokemonCount: currentNumber
+//     })
+//   }, function (errorObject) {
+//     console.log("the read failed: " + errorObject.code);
+//   });
+// }
+
 module.exports.addPokemon = function(req, response) {
 
   function getRandomInt(min, max) {
@@ -21,7 +34,7 @@ module.exports.addPokemon = function(req, response) {
     pokemonIds.set({
       caught: Date.now()
     });
-    //This chunk of code updates the current total amount of pokemon
+    // This chunk of code updates the current total amount of pokemon
     var pokemonCounter = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
     pokemonCounter.child('pokemonCount').once("value", function(snapshot) {
       var currentNumber = snapshot.val();
@@ -45,6 +58,16 @@ module.exports.addLegendary = function(req, response, pokemonId) {
   var myFirebaseRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + (--pokemonId) + "/");
   myFirebaseRef.set({
     caught: Date.now()
+  });
+  var pokemonCounter = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
+  pokemonCounter.child('pokemonCount').once("value", function(snapshot) {
+    var currentNumber = snapshot.val();
+    currentNumber++;
+    pokemonCounter.update({
+      pokemonCount: currentNumber
+    })
+  }, function (errorObject) {
+    console.log("the read failed: " + errorObject.code);
   });
 };
 

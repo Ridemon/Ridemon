@@ -20,30 +20,30 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", function($s
       name: 'St. Anthony Foundation',
       address: '150 Golden Gate Ave. San Francisco, CA 94102',
       pokemon: 'MewTwo',
-      pokemonID: 151
+      pokemonID: 150
     },
     {
       name: 'SF-Marin Food Bank',
       address: '900 Pennsylvania Ave. San Francisco, CA  94107',
       pokemon: 'Articuno',
-      pokemonID: 145
+      pokemonID: 144
     },
     {
       name: 'SF SPCA Pet Adoption Center',
       address: '250 Florida Street San Francisco CA 94103',
       pokemon: 'Zapdos',
-      pokemonID: 146
+      pokemonID: 145
     },
     {
       name: 'HandsOn Bay Area',
       address: '1504 Bryant Street, San Francisco, CA 94103',
       pokemon: 'Moltres',
-      pokemonID: 147
+      pokemonID: 146
     },
   ];
 
   $scope.charityList.forEach(function(charity) {
-    $http.get("http://pokeapi.co/api/v1/sprite/" + charity.pokemonID)
+    $http.get("http://pokeapi.co/api/v1/sprite/" + (++charity.pokemonID))
         .success(function(data) {
           charity.image = data.image;
       });

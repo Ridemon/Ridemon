@@ -19,6 +19,9 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
 
   $scope.showMap = function(mapURL) {
     $scope.mapURL = mapURL;
+    var viewHeight = document.documentElement.clientHeight;
+    angular.element(document).find('iframe').attr('height', viewHeight - 125); // Take into accout nav bar spacing
+    angular.element(document).find('iframe').attr('width', '100%');
   };
 
   $scope.charityList = [

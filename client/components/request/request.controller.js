@@ -19,6 +19,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
 
   $scope.showMap = function(mapURL) {
     $scope.mapURL = mapURL;
+    // Get height of current viewport to scale map to full screen
     var viewHeight = document.documentElement.clientHeight;
     angular.element(document).find('iframe').attr('height', viewHeight - 125); // Take into accout nav bar spacing
     angular.element(document).find('iframe').attr('width', '100%');
@@ -138,6 +139,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
     }
   );
 
+  // This function gives permission for angular to load map content in an iframe
   $scope.trustSrc = function(src) {
     return $sce.trustAsResourceUrl(src);
   };

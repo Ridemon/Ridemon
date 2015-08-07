@@ -1,5 +1,6 @@
 RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", function($scope, $http, $q, $sce) {
   $scope.current = {};
+  $scope.ride_id;  // ID of uber ride to use when cancelling a ride
 
   $scope.reset = function() {
     $scope.request = {};
@@ -21,7 +22,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
     $scope.mapURL = mapURL;
     // Get height of current viewport to scale map to full screen
     var viewHeight = document.documentElement.clientHeight;
-    angular.element(document).find('iframe').attr('height', viewHeight - 125); // Take into accout nav bar spacing
+    angular.element(document).find('iframe').attr('height', viewHeight - 175); // Take into accout nav bar spacing
     angular.element(document).find('iframe').attr('width', '100%');
   };
 
@@ -87,7 +88,8 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
         rideRequest.data.legendary = legendary;
         $http.post("/request-ride", rideRequest)
           .success(function(data, status, headers, config){
-            $scope.showMap(data);
+            $scope.showMap(data.map);
+            $scope.ride_id = data.request_id;
           })
           .error(function(data) {
             if(!$scope.message) {
@@ -97,6 +99,18 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
           });
       });
     });
+  };
+
+  $scope.cancelRide = function() {
+    console.log($scope.ride_id);
+    var sendData = { id: $scope.ride_id };
+    $http.post("/cancel-ride", sendData)
+          .success(function(data, status, headers, config){
+            $scope.cancel();
+          })
+          .error(function(data) {
+            console.log("Error: ", data);
+          });
   };
 
   var parseAddressToLatLng = function(address) {

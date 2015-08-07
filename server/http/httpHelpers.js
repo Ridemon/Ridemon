@@ -56,15 +56,40 @@ module.exports.requestRide = function(req, res) {
 
           // Get map
           getMap(body.request_id, token, function(mapURL) {
-            console.log("map url: ", mapURL);
-            map = mapURL;
+            var responseData = {}; // JSON Object sent back to client as response
+
+            responseData.map = mapURL;
+            responseData.request_id = body.request_id;
 
             console.log(body);
-            res.send(map);
+            res.send(JSON.stringify(responseData));
           });
         });
       }
   });
+  }
+};
+
+module.exports.cancelRide = function(req, res) {
+  var token = req.session.access_token;
+
+  if(token === undefined) {
+    console.log('Error: user not authenticated');
+    res.status(401).end();
+  } else {
+    request({
+      method: 'DELETE',
+      url: 'https://sandbox-api.uber.com/v1/requests/' + req.body.id,
+      headers: {
+            'Content-Type': 'application/JSON',
+            'Authorization': 'Bearer ' + token
+          }
+        }, function(error, response, body) {
+          if (error) {
+            console.log("Error: " + error);
+          }
+          res.status(response.statusCode).end();
+      })
   }
 };
 

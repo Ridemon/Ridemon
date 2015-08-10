@@ -3,7 +3,7 @@ var request = require('request');
 
 // Pokemon IDs of all base pokemon (non-evolved)
 var availablePokemon = [
-  1,4,7,10,13,16,19,21,23,25,27,29,32,35,37,39,41,43,46,48,50,52,54,56,58,60,63,66,69,72,74,77,79,81,83,84,86,88,90,92,95,96,98,100,102,104,106,107,108,109,111,113,114,115,116,118,120,122,123,124,125,126,127,128,129,131,132,133 /*Eevee has several possible evolutions to consider*/,137,138,140,142,143,147
+  1 //,4,7,10,13,16,19,21,23,25,27,29,32,35,37,39,41,43,46,48,50,52,54,56,58,60,63,66,69,72,74,77,79,81,83,84,86,88,90,92,95,96,98,100,102,104,106,107,108,109,111,113,114,115,116,118,120,122,123,124,125,126,127,128,129,131,132,133 /*Eevee has several possible evolutions to consider*/,137,138,140,142,143,147
 ];
 
 module.exports.addPokemon = function(req, response) {
@@ -16,9 +16,25 @@ module.exports.addPokemon = function(req, response) {
   var pokemonId = availablePokemon[getRandomInt(1, availablePokemon.length - 1)];
 
   var savePokemonId = function() {
+    console.log("Pokemon ID: ", pokemonId)
     var userId = req.session.userId;
-    var pokemonIds = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
-    pokemonIds.set({
+    // var pokemonIds = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
+    var pokemonIds = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/");
+
+    //Check to see if user owns the pokemon already and set the proper number of pokemon owned
+    pokemonIds.once('value', function(snapshot) {
+      if(snapshot.child(pokemonId).exists()) {
+        var currentOwned = snapshot.child(pokemonId).child('numberOwned').val();
+        pokemonIds.child(pokemonId).update({
+          numberOwned: currentOwned + 1
+        })
+      } else {
+        pokemonIds.child(pokemonId).update({
+          numberOwned: 1
+        })
+      }
+    })
+    pokemonIds.child(pokemonId).update({
       caught: Date.now()
     });
     // This chunk of code updates the current total amount of pokemon

@@ -2,7 +2,7 @@
   <div class="col-lg-10 well bs-component">
     <header class="center-text">
       <h1>The Leaderboard</h1>
-      <p>{{userArray}}</p>
+      <p>{{users}}</p>
       <p ng-show="userArray.length">These are the best collectors in town!</p>
     </header>
 
@@ -15,10 +15,10 @@
           </th>
         </thead>
         <tbody>
-          <tr ng-repeat="user in userArray track by $index">
+          <tr ng-repeat="user in userNames">
             <td>{{$index + 1}}. </td>
             <td>{{user.name}}</td>
-            <td>{{user.count}}</td>
+            <td>{{user.pokemonCount}}</td>
           </tr>
         </tbody>
       </table>

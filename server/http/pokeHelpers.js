@@ -16,9 +16,25 @@ module.exports.addPokemon = function(req, response) {
   var pokemonId = availablePokemon[getRandomInt(1, availablePokemon.length - 1)];
 
   var savePokemonId = function() {
+    console.log("Pokemon ID: ", pokemonId)
     var userId = req.session.userId;
-    var pokemonIds = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
-    pokemonIds.set({
+    // var pokemonIds = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/" + pokemonId + "/");
+    var pokemonIds = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/");
+
+    //Check to see if user owns the pokemon already and set the proper number of pokemon owned
+    pokemonIds.once('value', function(snapshot) {
+      if(snapshot.child(pokemonId).exists()) {
+        var currentOwned = snapshot.child(pokemonId).child('numberOwned').val();
+        pokemonIds.child(pokemonId).update({
+          numberOwned: currentOwned + 1
+        })
+      } else {
+        pokemonIds.child(pokemonId).update({
+          numberOwned: 1
+        })
+      }
+    })
+    pokemonIds.child(pokemonId).update({
       caught: Date.now()
     });
     // This chunk of code updates the current total amount of pokemon

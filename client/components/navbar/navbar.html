@@ -10,18 +10,14 @@
       <a class="navbar-brand" ui-sref-active="active" href="#" ui-sref="requestRide">Ridemon</a>
     </div>
     <div class="collapse navbar-collapse" id="navbar-1">
-       <ul class="nav navbar-nav">
-        <li ui-sref-active="active"><a href="#" ui-sref="about">About <span class="sr-only">(current)</span></a></li>
-        </li>
-        </li>
-      </ul>
       <ul class="nav navbar-nav">
         <li ui-sref-active="active"><a href="#" ui-sref="pokedex">Your Pokedex <span class="sr-only">(current)</span></a></li>
-        </li>
       </ul>
       <ul class="nav navbar-nav">
         <li ui-sref-active="active"><a href="#" ui-sref="leaderboard">Top Trainers <span class="sr-only">(current)</span></a></li>
-        </li>
+      </ul>
+       <ul class="nav navbar-nav">
+        <li ui-sref-active="active"><a href="#" ui-sref="about">About <span class="sr-only">(current)</span></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-show="user.loggedIn">
         <li><a href="#">{{ user.first_name }}</a></li>

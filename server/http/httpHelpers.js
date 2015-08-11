@@ -63,7 +63,7 @@ module.exports.requestRide = function(req, res) {
             responseData.request_id = body.request_id;
 
             console.log(body);
-            res.send(JSON.stringify(responseData));
+            res.end(JSON.stringify(responseData));
           });
         });
       }

@@ -51,7 +51,6 @@ module.exports.addPokemon = function(req, response) {
   };
 
   savePokemonId();
-  response.end()
 };
 
 // If pokemon is legendary, the pokeID will be passed in so this function will be called instead

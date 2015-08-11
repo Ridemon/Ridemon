@@ -1,5 +1,6 @@
 var request = require('request');
 var pokemonHelper = require('./pokeHelpers.js');
+var config = require('../config/config');
 
 module.exports.requestRide = function(req, res) {
   var token = req.session.access_token;
@@ -24,29 +25,15 @@ module.exports.requestRide = function(req, res) {
       if (data.products.length === 0) {
         res.status(400).send();
       } else {
+
+        makeRideRequest(req, function() {
+
+
+
         // Use first product ID which is for basic Uber to make ride request
         var product_id = data.products[0].product_id;
-        request({
-          url: 'https://sandbox-api.uber.com/v1/requests',
-          method: 'POST',
-          json: {
-            'product_id': product_id,
-            'start_latitude': startLat,
-            'start_longitude': startLong,
-            'end_latitude': endLat,
-            'end_longitude': endLong
-          },
-          headers: {
-            'Content-Type': 'application/JSON',
-            'Authorization': 'Bearer ' + token
-          }
-        }, function(error, response, body) {
-          var map;  // variable to store map url for sending back to client
 
-          if(error) {
-            console.log('error:', error);
-          }
-
+// ------------------------------------------------------------------------------------------------------------------------ pokehelper
           // Make call to pokemon API to get new pokemon for the user
           if(legendary === false) {
             pokemonHelper.addPokemon(req, res);
@@ -54,6 +41,7 @@ module.exports.requestRide = function(req, res) {
             console.log("LEGENDARY: ", legendary);
             pokemonHelper.addLegendary(req, res, legendary);
           }
+// ------------------------------------------------------------------------------------------------------------------------ pokehelper
 
           // Get map
           getMap(body.request_id, token, function(mapURL) {
@@ -64,6 +52,7 @@ module.exports.requestRide = function(req, res) {
 
             console.log(body);
             res.end(JSON.stringify(responseData));
+            });
           });
         });
       }
@@ -80,7 +69,7 @@ module.exports.cancelRide = function(req, res) {
   } else {
     request({
       method: 'DELETE',
-      url: 'https://sandbox-api.uber.com/v1/requests/' + req.body.id,
+      url: config.uberURL + 'requests/' + req.body.id,
       headers: {
             'Content-Type': 'application/JSON',
             'Authorization': 'Bearer ' + token
@@ -94,9 +83,33 @@ module.exports.cancelRide = function(req, res) {
   }
 };
 
+var makeRideRequest = function(callback) {
+  request({
+      url:  config.uberURL + 'requests',
+      method: 'POST',
+      json: {
+        'product_id'      : product_id,
+        'start_latitude'  : startLat,
+        'start_longitude' : startLong,
+        'end_latitude'    : endLat,
+        'end_longitude'   : endLong
+      },
+      headers: {
+        'Content-Type': 'application/JSON',
+        'Authorization': 'Bearer ' + token
+      }
+    }, function(error, response, body) {
+      var map;  // variable to store map url for sending back to client
+
+      if(error) {
+        console.log('error:', error);
+      }
+    }
+};
+
 var getMap = function(request_id, token, callback) {
   request({
-    url: 'https://sandbox-api.uber.com/v1/requests/' + request_id + '/map',
+    url: config.uberURL + 'requests/' + request_id + '/map',
     method: 'GET',
     headers: {
     'Content-Type': 'application/JSON',
@@ -109,7 +122,7 @@ var getMap = function(request_id, token, callback) {
 
 var getProducts = function(lat, long, token, callback) {
   request({
-    url: 'https://api.uber.com/v1/products',
+    url: config.uberURL + 'products',
     method: 'GET',
     qs: {
       latitude: lat,

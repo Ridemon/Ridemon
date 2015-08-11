@@ -39,11 +39,11 @@ module.exports.callback = function(req, res) {
     url: 'https://login.uber.com/oauth/token',
     method: 'POST',
     qs: {
-      'client_secret': config.clientSecret,
-      'client_id': config.clientID,
-      'grant_type': 'authorization_code',
-      'redirect_uri': 'http://localhost:3333/auth/uber/callback',
-      'code': code
+      'client_secret' : config.clientSecret,
+      'client_id'     : config.clientID,
+      'grant_type'    : 'authorization_code',
+      'redirect_uri'  : config.callbackURL,
+      'code'          : code
     }
   }, function(error, response, body) {
     body = JSON.parse(body);
@@ -78,5 +78,5 @@ module.exports.callback = function(req, res) {
       res.cookie('first_name', body.first_name);
       res.redirect('/');
     });
-});
+  });
 };

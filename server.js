@@ -7,7 +7,7 @@ var session = require('express-session');
 var FirebaseStore = require('connect-firebase')(session);
 
 var handleAuth = require('./server/http/authHelpers')
-var uberHelper = require('./server/http/httpHelpers');
+var uberHelper = require('./server/http/uberHelpers');
 var pokemonHelper = require('./server/http/pokeHelpers');
 
 var port = process.env.PORT || 3333;

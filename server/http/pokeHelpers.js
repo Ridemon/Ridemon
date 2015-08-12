@@ -40,7 +40,6 @@ module.exports.addPokemon = function(req, response, pokemonId) {
 };
 
 
-
 module.exports.loadPokemon = function(req, response) {
   var pokemonArray = [];
 

@@ -4,12 +4,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
 
   $scope.reset = function() {
     $scope.request = {};
-    $scope.cancel();
     $scope.message = "";
-    $scope.mapURL = "";
-  };
-
-  $scope.cancel = function() {
     $scope.mapURL = "";
     $scope.cleanSlate = true;
   };
@@ -94,7 +89,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
           .error(function(data) {
             if(!$scope.message) {
               $scope.message = "We're sorry! Something went wrong. Please try again.";
-              $scope.cancel();
+              $scope.reset();
             }
           });
       });
@@ -106,7 +101,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
     var sendData = { id: $scope.ride_id };
     $http.post("/cancel-ride", sendData)
           .success(function(data, status, headers, config){
-            $scope.cancel();
+            $scope.reset();
           })
           .error(function(data) {
             console.log("Error: ", data);
@@ -120,12 +115,12 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
     }).then(function(data) {
        if(data.status === "ZERO_RESULTS") {
          $scope.message = "We found zero results for that address.";
-         $scope.cancel();
+         $scope.reset();
        } else if(data && data.data && data.data.results && data.data.results[0] && data.data.results[0].geometry) {
          return data.data.results[0].geometry.location;
        } else {
          $scope.message = "No results.";
-         $scope.cancel();
+         $scope.reset();
        }
     });
   };
@@ -142,7 +137,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
             $scope.current.address = data.results[0].formatted_address;
           } else {
             $scope.message = "We don't recognize that address. Please try again.";
-            $scope.cancel();
+            $scope.reset();
           }
         })
     },

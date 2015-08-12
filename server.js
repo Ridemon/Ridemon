@@ -36,6 +36,6 @@ app.get('/logout', function(req, res) {
 
 app.post('/request-ride', uberHelper.requestRide);
 app.post('/cancel-ride', uberHelper.cancelRide);
-app.get('/pokedex', pokemonHelper.getPokemon);
+app.get('/pokedex', pokemonHelper.loadPokemon);
 
 app.listen(port, function() { console.log('listening on port ' + port + '...')});

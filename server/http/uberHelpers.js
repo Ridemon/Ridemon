@@ -34,7 +34,7 @@ module.exports.requestRide = function(req, res) {
             pokemonHelper.addPokemon(req, res);
           } else {
             console.log("LEGENDARY: ", legendary);
-            pokemonHelper.addLegendary(req, res, legendary);
+            pokemonHelper.addPokemon(req, res, legendary);
           }
 // ------------------------------------------------------------------------------------------------------------------------ pokehelper
 

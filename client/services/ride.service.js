@@ -1,0 +1,3 @@
+RidemonApp.factory("RideService", [function() {
+
+}]);

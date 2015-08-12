@@ -21,6 +21,11 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
     angular.element(document).find('iframe').attr('width', '100%');
   };
 
+  // This function gives permission for angular to load map content in an iframe
+  $scope.trustSrc = function(src) {
+    return $sce.trustAsResourceUrl(src);
+  };
+
   $scope.charityList = [
     {
       name: 'St. Anthony Foundation',
@@ -60,7 +65,6 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
     var legendary = false;
 
     if(charity && charity.address) {
-      $scope.request.destination = charity.address;
       $scope.request.end_address = charity.address;
       legendary = charity.pokemonID;
     }
@@ -68,19 +72,25 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
     $scope.message = "";
     $scope.cleanSlate = false;
     var rideRequest = {};
+
     parseAddressToLatLng($scope.request.start_address).then(function(res) {
       start = res;
+
       parseAddressToLatLng($scope.request.end_address).then(function(res) {
         end = res;
+
         rideRequest.data = {};
+
         if(!start.lat || !start.lng || !end.lat || !end.lng) {
           return new Error("Missing latitude or longitude information");
         }
+
         rideRequest.data.start_latitude = start.lat;
         rideRequest.data.start_longitude = start.lng;
         rideRequest.data.end_latitude = end.lat;
         rideRequest.data.end_longitude = end.lng;
         rideRequest.data.legendary = legendary;
+
         $http.post("/request-ride", rideRequest)
           .success(function(data, status, headers, config){
             $scope.showMap(data.map);
@@ -148,8 +158,4 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
     }
   );
 
-  // This function gives permission for angular to load map content in an iframe
-  $scope.trustSrc = function(src) {
-    return $sce.trustAsResourceUrl(src);
-  };
 }]);

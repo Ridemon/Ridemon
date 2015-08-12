@@ -6,33 +6,33 @@ module.exports.addPokemon = function(req, response, pokemonId) {
   //This checks to see if a set pokemon is requested (i.e. legendary pokemon), otherwise it generates a random poke
   pokemonId = pokemonId - 1 || pokeUtils.getRandomPokemonId();
   var userId = req.session.userId;
-  var userPokemon = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/");
 
+  var userPokemon = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
+  var userPokemonIds = userPokemon.child('pokemonIds');
   //Check to see if user owns the pokemon already and set the proper number of pokemon owned
-  userPokemon.once('value', function(snapshot) {
+  userPokemonIds.once('value', function(snapshot) {
     if(snapshot.child(pokemonId).exists()) {
       var currentOwned = snapshot.child(pokemonId).child('numberOwned').val();
-      userPokemon.child(pokemonId).update({
+      userPokemonIds.child(pokemonId).update({
         numberOwned: currentOwned + 1
       })
     } else {
-      userPokemon.child(pokemonId).update({
+      userPokemonIds.child(pokemonId).update({
         numberOwned: 1
       })
     }
   })
-  userPokemon.child(pokemonId).update({
+  userPokemonIds.child(pokemonId).update({
     caught: Date.now()
   });
 
   // This chunk of code updates the current total amount of pokemon
-  var pokemonCounter = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
-  pokemonCounter.child('pokemonCount')
-    .once("value", function(snapshot) {
-      var currentNumber = snapshot.val();
-      currentNumber++;
-      pokemonCounter.update({
-        pokemonCount: currentNumber
+  userPokemon.once("value", function(snapshot) {
+      var userData = snapshot.val();
+      var currentCount = userData.pokemonCount;
+      currentCount++;
+      userPokemon.update({
+        pokemonCount: currentCount
       })
     }, function (errorObject) {
       console.log("the read failed: " + errorObject.code);

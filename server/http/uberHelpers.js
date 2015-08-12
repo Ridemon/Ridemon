@@ -7,9 +7,7 @@ module.exports.requestRide = function(req, res) {
 
   // First get uber products for the area of request
   var startLat  = req.body.data.start_latitude,
-      startLong = req.body.data.start_longitude,
-      endLat    = req.body.data.end_latitude,
-      endLong   = req.body.data.end_longitude;
+      startLong = req.body.data.start_longitude;
 
   // Get legendary ID if there's a legendary in the request
   var legendary = req.body.data.legendary;
@@ -23,15 +21,12 @@ module.exports.requestRide = function(req, res) {
     getProducts(startLat, startLong, token, function(data) {
       // If products array is empty, there are no Uber rides available at that location
       if (data.products.length === 0) {
-        res.status(400).send();
+        res.status(400).end();
       } else {
-
-        makeRideRequest(req, function() {
-
-
-
         // Use first product ID which is for basic Uber to make ride request
         var product_id = data.products[0].product_id;
+
+        makeRideRequest(req, product_id, token, function(rideData) {
 
 // ------------------------------------------------------------------------------------------------------------------------ pokehelper
           // Make call to pokemon API to get new pokemon for the user
@@ -44,19 +39,17 @@ module.exports.requestRide = function(req, res) {
 // ------------------------------------------------------------------------------------------------------------------------ pokehelper
 
           // Get map
-          getMap(body.request_id, token, function(mapURL) {
+          getMap(rideData.request_id, token, function(mapURL) {
             var responseData = {}; // JSON Object sent back to client as response
 
             responseData.map = mapURL;
-            responseData.request_id = body.request_id;
+            responseData.request_id = rideData.request_id;
 
-            console.log(body);
             res.end(JSON.stringify(responseData));
             });
           });
-        });
-      }
-  });
+        }
+      });
   }
 };
 
@@ -83,7 +76,13 @@ module.exports.cancelRide = function(req, res) {
   }
 };
 
-var makeRideRequest = function(callback) {
+var makeRideRequest = function(req, product_id, token, callback) {
+
+  var startLat  = req.body.data.start_latitude,
+    startLong = req.body.data.start_longitude,
+    endLat    = req.body.data.end_latitude,
+    endLong   = req.body.data.end_longitude;
+
   request({
       url:  config.uberURL + 'requests',
       method: 'POST',
@@ -104,7 +103,9 @@ var makeRideRequest = function(callback) {
       if(error) {
         console.log('error:', error);
       }
-    }
+
+      callback(body);
+    });
 };
 
 var getMap = function(request_id, token, callback) {

@@ -1,54 +1,10 @@
 var Firebase = require('firebase');
 var request = require('request');
-
-// ------------------------------------------------------------------------------------------------------------------------ Place in utils
-
-// Pokemon IDs of all base pokemon (non-evolved)
-var availablePokemon = [
-  1,4,7,10,13,16,19,21,23,25,27,29,32,35,37,39,41,43,46,48,50,52,54,56,58,60,63,66,69,72,74,77,79,81,83,84,86,88,90,92,95,96,98,100,102,104,106,107,108,109,111,113,114,115,116,118,120,122,123,124,125,126,127,128,129,131,132,133 /*Eevee has several possible evolutions to consider*/,137,138,140,142,143,147
-];
-// This function takes in a time in milliseconds and converts it to an 'ago' time
-// e.g. 39275875ms --> 17 hours ago
-var timeSince = function(date) {
-  var seconds = Math.floor((new Date() - date) / 1000);
-
-  var interval = Math.floor(seconds / 31536000);
-
-  if (interval > 1) {
-    return interval + " years";
-  }
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) {
-    return interval + " months";
-  }
-  interval = Math.floor(seconds / 86400);
-  if (interval > 1) {
-    return interval + " days";
-  }
-  interval = Math.floor(seconds / 3600);
-  if (interval > 1) {
-    return interval + " hours";
-  }
-  interval = Math.floor(seconds / 60);
-  if (interval > 1) {
-    return interval + " minutes";
-  }
-  return Math.floor(seconds) + " seconds";
-};
-
-var getRandomInt = function(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-};
-
-var getRandomPokemonId = function() {
-  return availablePokemon[getRandomInt(1, availablePokemon.length - 1)];
-};
-
-// ------------------------------------------------------------------------------------------------------------------------ Place in utils
+var pokeUtils = require('../utils/pokeUtils.js');
 
 module.exports.addPokemon = function(req, response, pokemonId) {
   //This checks to see if a set pokemon is requested (i.e. legendary pokemon), otherwise it generates a random poke
-  pokemonId = pokemonId - 1 || getRandomPokemonId();
+  pokemonId = pokemonId - 1 || pokeUtils.getRandomPokemonId();
   var userId = req.session.userId;
   var userPokemon = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId + "/pokemonIds/");
 
@@ -83,43 +39,11 @@ module.exports.addPokemon = function(req, response, pokemonId) {
     });
 };
 
-// ------------------------------------------------------------------------------------------------------------------------ Place in utils
 
-var capitalize = function(word) {
-  if(!word) return "";
-  var firstLetter = word[0].toUpperCase();
-  var restWord = word.slice(1).toLowerCase();
-  return firstLetter + restWord;
-};
-
-var queryPokemon = function(pokeId, callback) {
-  var pokey = {};
-  request({
-    url: "http://pokeapi.co/api/v1/pokemon/" + pokeId,
-    method: "GET"
-  }, function(error, res, data) {
-    data = JSON.parse(data);
-    pokey.abilities = data.abilities;
-    if(data.evolutions.length > 0){
-      pokey.evolvesTo = data.evolutions[0].to;
-    }
-    request({
-      url: "http://pokeapi.co/api/v1/sprite/" + (++pokeId),
-      method: "GET"
-    }, function(error, res, data) {
-      data = JSON.parse(data);
-      pokey.name = capitalize(data.pokemon.name);
-      pokey.image = data.image;
-      callback(pokey);
-    })
-  });
-};
-
-// ------------------------------------------------------------------------------------------------------------------------ Place in utils
-
-var pokemonArray = [];
 
 module.exports.loadPokemon = function(req, response) {
+  var pokemonArray = [];
+
   var userId = req.params.specialUid || req.session.userId;
 
   request({
@@ -135,8 +59,8 @@ module.exports.loadPokemon = function(req, response) {
       var index = 0, count = 0;
       for(var pokemonId in pokemonIds) {
         +(function(ind) {
-          queryPokemon(ind, function(data) {
-            data.caught = timeSince(pokemonIds[ind].caught) + ' ago';
+          pokeUtils.queryPokemon(ind, function(data) {
+            data.caught = pokeUtils.timeSince(pokemonIds[ind].caught) + ' ago';
             pokemonArray[count] = data;
             count++;
             if(count === index) {

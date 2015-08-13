@@ -142,7 +142,6 @@ module.exports.addOrEvolvePokemon = function(databaseRef, pokemonId, pokemonURI)
             method: "GET"
           }, function(error, res, data) {
             data = JSON.parse(data);
-            console.log(data.evolutions[0].resource_uri);
             pokemonData.evolution_uri = data.evolutions[0].resource_uri;
             pokemonData.evolvesTo = data.evolutions[0].to;
             request({
@@ -154,7 +153,7 @@ module.exports.addOrEvolvePokemon = function(databaseRef, pokemonId, pokemonURI)
                 if (pokemonData.evolvesTo.indexOf('mega') === -1) {
                   module.exports.addOrEvolvePokemon(databaseRef, pokemonData.evolution_id, pokemonData.evolution_uri);
                 } else {
-                  console.log("Cannot evolve further");
+                  console.log("CANNOT EVOLVE FURTHER");
                 }
             })
           });

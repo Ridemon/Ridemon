@@ -79,32 +79,6 @@ module.exports.queryPokemon = function(pokeId, callback) {
 
 //EVOLUTION UTILS HERE!!!
 // ------------------- //
-module.exports.setPokemonInfo = function(pokeRef, pokemonId) {
-  pokeRef.once('value', function(snapshot) {
-    if(snapshot.child(pokemonId).exists()) {
-      //Just checked to see if initial poke exists. We can call our evolve pokemon function here
-      if (canEvolve(pokemonId)) {
-        console.log('Yea baby');
-      }
-
-      var currentOwned = snapshot.child(pokemonId).child('numberOwned').val();
-      var evolvedPokemonId = pokemonId + 1;
-      pokeRef.child(pokemonId).update({
-        numberOwned: currentOwned + 1
-      })
-      pokeRef.child(evolvedPokemonId).update({
-        numberOwned: 1,
-        caught: Date.now()
-      })
-    } else {
-      pokeRef.child(pokemonId).update({
-        numberOwned: 1,
-        caught: Date.now()
-      })
-    }
-  });
-}
-
 var canEvolve = function(pokeId, callback) {
   return request({
     url: "http://pokeapi.co/api/v1/pokemon/" + pokeId,

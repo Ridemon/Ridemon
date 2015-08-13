@@ -1,4 +1,5 @@
 var request = require('request');
+var Firebase = require('firebase');
 // Pokemon IDs of all base pokemon (non-evolved)
 // This function takes in a time in milliseconds and converts it to an 'ago' time
 // e.g. 39275875ms --> 17 hours ago
@@ -74,3 +75,106 @@ module.exports.queryPokemon = function(pokeId, callback) {
     })
   });
 };
+
+
+//EVOLUTION UTILS HERE!!!
+// ------------------- //
+module.exports.setPokemonInfo = function(pokeRef, pokemonId) {
+  pokeRef.once('value', function(snapshot) {
+    if(snapshot.child(pokemonId).exists()) {
+      //Just checked to see if initial poke exists. We can call our evolve pokemon function here
+      if (canEvolve(pokemonId)) {
+        console.log('Yea baby');
+      }
+
+      var currentOwned = snapshot.child(pokemonId).child('numberOwned').val();
+      var evolvedPokemonId = pokemonId + 1;
+      pokeRef.child(pokemonId).update({
+        numberOwned: currentOwned + 1
+      })
+      pokeRef.child(evolvedPokemonId).update({
+        numberOwned: 1,
+        caught: Date.now()
+      })
+    } else {
+      pokeRef.child(pokemonId).update({
+        numberOwned: 1,
+        caught: Date.now()
+      })
+    }
+  });
+}
+
+var canEvolve = function(pokeId, callback) {
+  return request({
+    url: "http://pokeapi.co/api/v1/pokemon/" + pokeId,
+    method: "GET"
+  }, function(error, res, data) {
+    data = JSON.parse(data);
+    console.log("DATA EVOLUTIONS: ", data.evolutions);
+    if(data.evolutions === [] || data.evolutions.length === 0){
+      callback(false);
+    } else {
+      callback(true);
+    }
+  });
+}
+
+module.exports.addOrEvolvePokemon = function(databaseRef, pokemonId, pokemonURI) {
+  var pokemonData = {};
+  databaseRef.once('value', function(snapshot) {
+    //If pokemon isn't in DB
+    if(!snapshot.child(pokemonId).exists()) {
+      console.log("POKEMON DID NOT PREVIOUSLY EXIST");
+      //Add Pokemon ID and details
+      databaseRef.child(pokemonId).update({
+        numberOwned: 1,
+        caught: Date.now()
+      });
+    } else {
+      pokemonURI = pokemonURI || "/api/v1/pokemon/" + pokemonId;
+      //if pokemon can evolve
+      canEvolve(pokemonId, function(evolvable) {
+        if (evolvable === true) {
+          console.log("YOUR POKEMON IS EVOLVING!");
+          request({
+            url: "http://pokeapi.co/" + pokemonURI,
+            method: "GET"
+          }, function(error, res, data) {
+            data = JSON.parse(data);
+            console.log(data.evolutions[0].resource_uri);
+            pokemonData.evolution_uri = data.evolutions[0].resource_uri;
+            pokemonData.evolvesTo = data.evolutions[0].to;
+            request({
+                url: "http://pokeapi.co/" + pokemonData.evolution_uri,
+                method: "GET"
+              }, function(error, res, data) {
+                data = JSON.parse(data);
+                pokemonData.evolution_id = data.national_id;
+                if (pokemonData.evolvesTo.indexOf('mega') === -1) {
+                  module.exports.addOrEvolvePokemon(databaseRef, pokemonData.evolution_id, pokemonData.evolution_uri);
+                } else {
+                  console.log("Cannot evolve further");
+                }
+            })
+          });
+        } else {
+          var currentOwned = snapshot.child(pokemonId).child('numberOwned').val();
+          var evolvedPokemonId = pokemonId + 1;
+          databaseRef.child(pokemonId).update({
+            numberOwned: currentOwned + 1
+          });
+        }
+      });
+    }
+  });
+}
+
+
+
+
+
+
+
+
+

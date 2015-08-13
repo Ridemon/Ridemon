@@ -45,6 +45,7 @@ module.exports.requestRide = function(req, res) {
   }
 };
 
+
 module.exports.cancelRide = function(req, res) {
   var token = req.session.access_token;
   if(token === undefined) {

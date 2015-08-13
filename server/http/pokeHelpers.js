@@ -10,21 +10,7 @@ module.exports.addPokemon = function(req, response, pokemonId) {
   var userPokemon = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
   var userPokemonIds = userPokemon.child('pokemonIds');
   //Check to see if user owns the pokemon already and set the proper number of pokemon owned
-  userPokemonIds.once('value', function(snapshot) {
-    if(snapshot.child(pokemonId).exists()) {
-      var currentOwned = snapshot.child(pokemonId).child('numberOwned').val();
-      userPokemonIds.child(pokemonId).update({
-        numberOwned: currentOwned + 1
-      })
-    } else {
-      userPokemonIds.child(pokemonId).update({
-        numberOwned: 1
-      })
-    }
-  })
-  userPokemonIds.child(pokemonId).update({
-    caught: Date.now()
-  });
+  pokeUtils.addOrEvolvePokemon(userPokemonIds, pokemonId);
 
   // This chunk of code updates the current total amount of pokemon
   userPokemon.once("value", function(snapshot) {
@@ -38,7 +24,6 @@ module.exports.addPokemon = function(req, response, pokemonId) {
       console.log("the read failed: " + errorObject.code);
     });
 };
-
 
 
 module.exports.loadPokemon = function(req, response) {

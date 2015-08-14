@@ -10,7 +10,7 @@ var setNewUserInfo = function(userId, userName) {
   newUser.set({
     name: userName,
     pokemonCount: 0
-  })
+  });
 };
 
 var checkIfUserExists = function(userId, userName) {

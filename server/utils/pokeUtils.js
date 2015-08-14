@@ -38,7 +38,7 @@ module.exports.queryPokemon = function(pokeId, callback) {
       pokey.name = capitalize(data.pokemon.name);
       pokey.image = data.image;
       callback(pokey);
-    })
+    });
   });
 };
 
@@ -115,7 +115,7 @@ var getEvolutionId = function(databaseRef, pokemonData, pokemonURI) {
       if (pokemonData.evolvesTo.indexOf('mega') === -1) {
         module.exports.addOrEvolvePokemon(databaseRef, pokemonData.evolution_id, pokemonURI);
       }
-  })
+  });
 };
 
 

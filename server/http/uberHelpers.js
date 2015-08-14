@@ -64,7 +64,7 @@ module.exports.cancelRide = function(req, res) {
             console.log("Error: " + error);
           }
           res.status(response.statusCode).end();
-      })
+      });
   }
 };
 

@@ -19,7 +19,7 @@ module.exports.addPokemon = function(req, response, pokemonId) {
       currentCount++;
       userPokemon.update({
         pokemonCount: currentCount
-      })
+      });
     }, function (errorObject) {
       console.log("the read failed: " + errorObject.code);
     });
@@ -43,9 +43,10 @@ module.exports.loadPokemon = function(req, response) {
       var pokemonIds = JSON.parse(body).pokemonIds;
       var index = 0, count = 0;
       for(var pokemonId in pokemonIds) {
-        +(function(ind) {
-          pokeUtils.queryPokemon(ind, function(data) {
-            data.caught = pokeUtils.timeSince(pokemonIds[ind].caught) + ' ago';
+        /* jshint ignore:start */
+        (function(ind) {
+          pokeUtils.queryPokemon(pokemonId, function(data) {
+            data.caught = pokeUtils.timeSince(pokemonIds[pokemonId].caught) + ' ago';
             pokemonArray[count] = data;
             count++;
             if(count === index) {
@@ -53,6 +54,7 @@ module.exports.loadPokemon = function(req, response) {
             }
           });
         })(pokemonId);
+        /* jshint ignore:end */
         index++;
       }
     } else {

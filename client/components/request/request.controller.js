@@ -1,4 +1,4 @@
-RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", function($scope, $http, $q, $sce) {
+RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", "RideService", function($scope, $http, $q, $sce, RideService) {
   $scope.current = {};
   $scope.ride_id;  // ID of uber ride to use when cancelling a ride
 
@@ -61,50 +61,56 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
   });
 
   $scope.requestRide = function(charity) {
-    var start, end;
-    var legendary = false;
-
-    if(charity && charity.address) {
-      $scope.request.end_address = charity.address;
-      legendary = charity.pokemonID;
-    }
-
     $scope.message = "";
     $scope.cleanSlate = false;
-    var rideRequest = {};
+    $scope.ride = RideService.rideMaker($scope.request.start_address, $scope.request.end_address)
+                  .then(function(data) {
+                    console.log('data in controller: ', data);
+                  })
+  }
+  //   var start, end;
+  //   var legendary = false;
 
-    parseAddressToLatLng($scope.request.start_address).then(function(res) {
-      start = res;
+  //   if(charity && charity.address) {
+  //     $scope.request.end_address = charity.address;
+  //     legendary = charity.pokemonID;
+  //   }
 
-      parseAddressToLatLng($scope.request.end_address).then(function(res) {
-        end = res;
+  //   $scope.message = "";
+  //   $scope.cleanSlate = false;
+  //   var rideRequest = {};
 
-        rideRequest.data = {};
+  //   parseAddressToLatLng($scope.request.start_address).then(function(res) {
+  //     start = res;
 
-        if(!start.lat || !start.lng || !end.lat || !end.lng) {
-          return new Error("Missing latitude or longitude information");
-        }
+  //     parseAddressToLatLng($scope.request.end_address).then(function(res) {
+  //       end = res;
 
-        rideRequest.data.start_latitude = start.lat;
-        rideRequest.data.start_longitude = start.lng;
-        rideRequest.data.end_latitude = end.lat;
-        rideRequest.data.end_longitude = end.lng;
-        rideRequest.data.legendary = legendary;
+  //       rideRequest.data = {};
 
-        $http.post("/request-ride", rideRequest)
-          .success(function(data, status, headers, config){
-            $scope.showMap(data.map);
-            $scope.ride_id = data.request_id;
-          })
-          .error(function(data) {
-            if(!$scope.message) {
-              $scope.message = "We're sorry! Something went wrong. Please try again.";
-              $scope.reset();
-            }
-          });
-      });
-    });
-  };
+  //       if(!start.lat || !start.lng || !end.lat || !end.lng) {
+  //         return new Error("Missing latitude or longitude information");
+  //       }
+
+  //       rideRequest.data.start_latitude = start.lat;
+  //       rideRequest.data.start_longitude = start.lng;
+  //       rideRequest.data.end_latitude = end.lat;
+  //       rideRequest.data.end_longitude = end.lng;
+  //       rideRequest.data.legendary = legendary;
+
+  //       $http.post("/request-ride", rideRequest)
+  //         .success(function(data, status, headers, config){
+  //           $scope.showMap(data.map);
+  //           $scope.ride_id = data.request_id;
+  //         })
+  //         .error(function(data) {
+  //           if(!$scope.message) {
+  //             $scope.message = "We're sorry! Something went wrong. Please try again.";
+  //             $scope.reset();
+  //           }
+  //         });
+  //     });
+  //   });
 
   $scope.cancelRide = function() {
     console.log($scope.ride_id);
@@ -118,22 +124,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", fun
           });
   };
 
-  var parseAddressToLatLng = function(address) {
-   return $q(function(resolve, reject) {
-      $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + address)
-        .then(resolve);
-    }).then(function(data) {
-       if(data.status === "ZERO_RESULTS") {
-         $scope.message = "We found zero results for that address.";
-         $scope.reset();
-       } else if(data && data.data && data.data.results && data.data.results[0] && data.data.results[0].geometry) {
-         return data.data.results[0].geometry.location;
-       } else {
-         $scope.message = "No results.";
-         $scope.reset();
-       }
-    });
-  };
+
 
   $scope.reset();
 

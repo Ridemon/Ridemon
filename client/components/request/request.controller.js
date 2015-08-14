@@ -14,7 +14,7 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", "Ri
   };
 
   $scope.showMap = function(mapURL) {
-    $scope.mapURL = mapURL;
+    //$scope.mapURL = mapURL;
     // Get height of current viewport to scale map to full screen
     var viewHeight = document.documentElement.clientHeight;
     angular.element(document).find('iframe').attr('height', viewHeight - 175); // Take into accout nav bar spacing
@@ -63,10 +63,11 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", "Ri
   $scope.requestRide = function(charity) {
     $scope.message = "";
     $scope.cleanSlate = false;
-    $scope.ride = RideService.rideMaker($scope.request.start_address, $scope.request.end_address)
-                  .then(function(data) {
-                    console.log('data in controller: ', data);
-                  })
+    RideService.rideMaker($scope.request.start_address, $scope.request.end_address, function(rideObject) {
+      $scope.ride = rideObject;
+      console.log(rideObject);
+      $scope.showMap(rideObject.map);
+    });
   }
   //   var start, end;
   //   var legendary = false;

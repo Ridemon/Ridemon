@@ -1,19 +1,43 @@
 RidemonApp.factory("RideService", ["$q", "$http", function($q, $http) {
-  var start, end;
+  var rideMaker = function(startAddress, endAddress, callback) {
+    var start, end;
+    var rideObject;
 
-  parseAddressToLatLng(startAddress, function(res) {
-    start = res;
-    parseAddressToLatLng(endAddress, function(res) {
-      end = res;
+    parseAddressToLatLng(startAddress, function(res) {
+      start = res;
+      parseAddressToLatLng(endAddress, function(res) {
+        end = res;
 
-      console.log('coords: ', res.lat, res.lng)
+        if(!start || !end) {
+          return new Error("Missing latitude or longitude information");
+        }
+
+        var rideRequest = {
+          data : {
+            start_latitude  : start.lat,
+            start_longitude : start.lng,
+            end_latitude    : end.lat,
+            end_longitude   : end.lng,
+          }
+        };
+
+        makeRequest(rideRequest, function(data) {
+          callback(data.data);
+        });
+      })
     })
-  })
 
-  var parseAddressToLatLng = function(address) {
-      $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + address, function(data) {
-        console.log(data);
-      });
+
+  }
+
+  var parseAddressToLatLng = function(address, callback) {
+      $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + address).
+        then(function(res) {
+          callback(res.data.results[0].geometry.location);
+        }, function(err) {
+          return new Error(err);
+        })
+      };
   //      if(data.status === "ZERO_RESULTS") {
   //        console.log("We found zero results for that address.")
   //        // $scope.message = "We found zero results for that address.";
@@ -28,5 +52,15 @@ RidemonApp.factory("RideService", ["$q", "$http", function($q, $http) {
   //        return null;
 
   //      }
+
+  var makeRequest = function(rideRequestObj, callback) {
+    $http.post('/request-ride', rideRequestObj).
+      then(function(res) {
+        callback(res);
+      })
   };
+
+  return {
+    rideMaker: rideMaker
+  }
 }]);

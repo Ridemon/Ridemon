@@ -24,11 +24,9 @@ module.exports.makeRideRequest = function(req, product_id, token, callback) {
       }
     }, function(error, response, body) {
       var map;  // variable to store map url for sending back to client
-
       if(error) {
         console.log('error:', error);
       }
-
       callback(body);
     });
 };
@@ -42,6 +40,9 @@ module.exports.getMap = function(request_id, token, callback) {
     'Authorization': 'Bearer ' + token
     }
   }, function(error, response, body) {
+    if(error) {
+      console.log('error:', error);
+    }
     callback(JSON.parse(body).href);
   });
 };
@@ -59,6 +60,9 @@ module.exports.getProducts = function(lat, long, token, callback) {
       'Authorization': 'Bearer ' + token
     }
   }, function(error, res, body) {
+    if(error) {
+      console.log('error:', error);
+    }
     callback(JSON.parse(body));
   });
 };

@@ -4,33 +4,32 @@ var request = require('request');
 var session = require('express-session');
 var config = require('../config/config');
 
-var setNewUserInfo = function(userId, exists, userName) {
-  if (exists) {
-    console.log("Welcome back ", userName);
-  } else {
-    console.log("Now inserting into the database");
-    var newUser = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
-    newUser.set({
-      name: userName,
-      pokemonCount: 0
-    })
-  }
-}
+var setNewUserInfo = function(userId, userName) {
+  console.log("Now inserting new user into the database");
+  var newUser = new Firebase("https://ridemon.firebaseio.com/users/userIds/" + userId);
+  newUser.set({
+    name: userName,
+    pokemonCount: 0
+  })
+};
 
 var checkIfUserExists = function(userId, userName) {
   var usersRef = new Firebase("https://ridemon.firebaseio.com/users/userIds/");
   usersRef.child(userId).once('value', function(snapshot) {
-    var exists = (snapshot.val() !== null);
-    setNewUserInfo(userId, exists, userName);
-  });
-}
-
+    if(!snapshot.exists()) {
+      setNewUserInfo(userId, userName);
+    } else {
+      console.log("Welcome back ", userName);
+    }
+  }); 
+};
 
 module.exports.login = function(req, res) {
   // Redirect to uber login page
   res.redirect('https://login.uber.com/oauth/authorize?response_type=code&scope=profile+history+request_receipt+request&client_id=' + config.clientID);
 };
 
+//This could be renamed
 module.exports.callback = function(req, res) {
   var code = req.query.code;
 

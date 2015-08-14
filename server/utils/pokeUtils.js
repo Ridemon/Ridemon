@@ -50,7 +50,6 @@ var capitalize = function(word) {
 };
 
 
-
 //EVOLUTION UTILS HERE!!!
 // ------------------- //
 module.exports.addOrEvolvePokemon = function(databaseRef, pokemonId, pokemonURI) {
@@ -118,6 +117,7 @@ var getEvolutionId = function(databaseRef, pokemonData, pokemonURI) {
       }
   })
 };
+
 
 module.exports.timeSince = function(date) {
   var seconds = Math.floor((new Date() - date) / 1000);

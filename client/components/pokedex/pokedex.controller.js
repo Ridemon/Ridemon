@@ -13,7 +13,7 @@ RidemonApp.controller('PokedexController', ['$scope', '$firebaseObject', '$http'
     .success(function(data) {
       $scope.pokemon.pokemon = data;
       if($scope.pokemon.pokemon.length) {
-;        $scope.pokemon.message = "These are the pokemon that you've earned. Enjoy them!";
+        $scope.pokemon.message = "These are the pokemon that you've earned. Enjoy them!";
       } else {
         $scope.pokemon.message = "You haven't earned any pokemon yet. You gotta ride if you want to fill up your Pokedex!";
       }

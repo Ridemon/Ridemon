@@ -15,7 +15,7 @@
           </th>
         </thead>
         <tbody>
-          <tr ng-repeat="user in userNames">
+          <tr ng-repeat="user in userNames | orderBy: '-pokemonCount'">
             <td>{{$index + 1}}. </td>
             <td>{{user.name}}</td>
             <td>{{user.pokemonCount}}</td>

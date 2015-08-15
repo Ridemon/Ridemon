@@ -1,4 +1,4 @@
-<form name="requestRideForm" novalidate class="form-horizontal" ng-submit="requestRide()" ng-show="!mapURL">
+<form name="requestRideForm" novalidate class="form-horizontal" ng-submit="requestRide()" ng-show="!ride.map">
   <fieldset>
     <legend>Request a Ride with <img class="uberlogo" data-ng-src="./components/request/Uber-Logo-Large.png"></img></legend>
     <div class="form-group">
@@ -13,7 +13,7 @@
     <div class="form-group">
       <label for="destination" class="col-lg-2 control-label">Destination</label>
       <div class="col-lg-10">
-        <input type="text" class="form-control" id="destination" ng-model="request.destination" placeholder="Ending Address" ng-disabled="!cleanSlate" required>
+        <input type="text" class="form-control" id="destination" ng-model="request.end_address" placeholder="Ending Address" ng-disabled="!cleanSlate" required>
       </div>
     </div>
     <div class="form-group">

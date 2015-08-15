@@ -5,21 +5,14 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", "Ri
   $scope.reset = function() {
     $scope.request = {};
     $scope.message = "";
-    $scope.mapURL = "";
     $scope.cleanSlate = true;
+    $scope.ride = null;
   };
 
   $scope.useCurrentLocation = function() {
     $scope.request.start_address = $scope.current.address;
   };
 
-  $scope.showMap = function(mapURL) {
-    //$scope.mapURL = mapURL;
-    // Get height of current viewport to scale map to full screen
-    var viewHeight = document.documentElement.clientHeight;
-    angular.element(document).find('iframe').attr('height', viewHeight - 175); // Take into accout nav bar spacing
-    angular.element(document).find('iframe').attr('width', '100%');
-  };
 
   // This function gives permission for angular to load map content in an iframe
   $scope.trustSrc = function(src) {
@@ -64,90 +57,30 @@ RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", "Ri
     $scope.message = "";
     $scope.cleanSlate = false;
     RideService.rideMaker($scope.request.start_address, $scope.request.end_address, function(rideObject) {
+      // After request, set $scope.ride which will render the map view
       $scope.ride = rideObject;
-      console.log(rideObject);
-      $scope.showMap(rideObject.map);
+      console.log($scope.ride.cancelRide);
+      // Resize the map to the current view size
+      RideService.resizeMap();
     });
   }
-  //   var start, end;
-  //   var legendary = false;
 
-  //   if(charity && charity.address) {
-  //     $scope.request.end_address = charity.address;
-  //     legendary = charity.pokemonID;
-  //   }
-
-  //   $scope.message = "";
-  //   $scope.cleanSlate = false;
-  //   var rideRequest = {};
-
-  //   parseAddressToLatLng($scope.request.start_address).then(function(res) {
-  //     start = res;
-
-  //     parseAddressToLatLng($scope.request.end_address).then(function(res) {
-  //       end = res;
-
-  //       rideRequest.data = {};
-
-  //       if(!start.lat || !start.lng || !end.lat || !end.lng) {
-  //         return new Error("Missing latitude or longitude information");
-  //       }
-
-  //       rideRequest.data.start_latitude = start.lat;
-  //       rideRequest.data.start_longitude = start.lng;
-  //       rideRequest.data.end_latitude = end.lat;
-  //       rideRequest.data.end_longitude = end.lng;
-  //       rideRequest.data.legendary = legendary;
-
-  //       $http.post("/request-ride", rideRequest)
-  //         .success(function(data, status, headers, config){
-  //           $scope.showMap(data.map);
-  //           $scope.ride_id = data.request_id;
-  //         })
-  //         .error(function(data) {
-  //           if(!$scope.message) {
-  //             $scope.message = "We're sorry! Something went wrong. Please try again.";
-  //             $scope.reset();
-  //           }
-  //         });
-  //     });
-  //   });
 
   $scope.cancelRide = function() {
-    console.log($scope.ride_id);
-    var sendData = { id: $scope.ride_id };
-    $http.post("/cancel-ride", sendData)
-          .success(function(data, status, headers, config){
-            $scope.reset();
-          })
-          .error(function(data) {
-            console.log("Error: ", data);
-          });
+    $scope.ride.cancelRide(function() {
+      $scope.reset();
+    });
   };
-
-
 
   $scope.reset();
 
-  // Get current position
-  navigator.geolocation.getCurrentPosition(
-    // Geolocation allowed
-    function(position) {
-      $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude)
-        .success(function(data) {
-          if(data && data.results && data.results[0] && data.results[0].formatted_address) {
-            $scope.current.address = data.results[0].formatted_address;
-          } else {
-            $scope.message = "We don't recognize that address. Please try again.";
-            $scope.reset();
-          }
-        })
-    },
-    // TODO: Handle geolocation failure/disallowal
-    // Geolocation failed
-    function() {
-      $scope.message = "Geolocation appears to be disabled in your browser. Please enable to use this feature.";
+  RideService.getGeolocation(function(address) {
+    if(address) {
+      $scope.current.address = address;
+    } else {
+      $scope.message = address;
+      $scope.reset();
     }
-  );
+  })
 
 }]);

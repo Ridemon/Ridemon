@@ -22,45 +22,72 @@ RidemonApp.factory("RideService", ["$q", "$http", function($q, $http) {
         };
 
         makeRequest(rideRequest, function(data) {
-          callback(data.data);
+          var rideObject = data.data;
+
+          rideObject.cancelRide = function(cb) {
+            $http.post("/cancel-ride", rideObject.ride_id)
+              .then(function(res){
+                cb();
+              }, function(err) {
+                console.log('error: ', err);
+                return new Error(err);
+              });
+          }
+
+          callback(rideObject);
         });
       })
     })
+  }
 
-
+  // It may be possible to set up map view as a custom directive that performs this function
+  var resizeMap = function() {
+    var viewHeight = document.documentElement.clientHeight;
+    angular.element(document).find('iframe').attr('height', viewHeight - 175); // Take into accout nav bar spacing
+    angular.element(document).find('iframe').attr('width', '100%');
   }
 
   var parseAddressToLatLng = function(address, callback) {
-      $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + address).
-        then(function(res) {
-          callback(res.data.results[0].geometry.location);
-        }, function(err) {
-          return new Error(err);
-        })
-      };
-  //      if(data.status === "ZERO_RESULTS") {
-  //        console.log("We found zero results for that address.")
-  //        // $scope.message = "We found zero results for that address.";
-  //        // $scope.reset();
-  //        return null;
-  //      } else if(data && data.data && data.data.results && data.data.results[0] && data.data.results[0].geometry) {
-  //        return data.data.results[0].geometry.location;
-  //      } else {
-  //        console.log("We found zero results for that address.")
-  //        // $scope.message = "No results.";
-  //        // $scope.reset();
-  //        return null;
+    $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + address).
+      then(function(res) {
+        callback(res.data.results[0].geometry.location);
+      }, function(err) {
+        return new Error(err);
+      });
+  };
 
-  //      }
 
   var makeRequest = function(rideRequestObj, callback) {
     $http.post('/request-ride', rideRequestObj).
       then(function(res) {
         callback(res);
-      })
+      });
   };
 
+  var getGeolocation = function(callback) {
+    navigator.geolocation.getCurrentPosition(
+    // Geolocation allowed
+    function(position) {
+      $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude)
+        .success(function(data) {
+          if(data && data.results && data.results[0] && data.results[0].formatted_address) {
+            callback(data.results[0].formatted_address);
+          } else {
+            callback(false);
+          }
+        })
+    },
+    // TODO: Handle geolocation failure/disallowal
+    // Geolocation failed
+    function() {
+      calback(false);
+    }
+  );
+  }
+
   return {
-    rideMaker: rideMaker
+    rideMaker: rideMaker,
+    resizeMap: resizeMap,
+    getGeolocation: getGeolocation
   }
 }]);

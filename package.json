@@ -21,5 +21,17 @@
     "grunt-contrib-watch": "^0.6.1",
     "http": "0.0.0",
     "request": "^2.58.0"
+  },
+  "devDependencies": {
+    "angular": "^1.4.4",
+    "angular-mocks": "^1.4.4",
+    "angular-sanitize": "^1.4.4",
+    "angularfire": "^1.1.2",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.9",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-jasmine": "^0.2.2",
+    "ng-sanitize": "0.0.2",
+    "ui-router": "0.0.1"
   }
 }

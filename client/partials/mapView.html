@@ -1,4 +1,4 @@
-<div id="map-view">
-  <iframe ng-src="{{ trustSrc(mapURL) }}" ng-show="mapURL"></iframe>
+<div id="map-view"  ng-show="ride.map">
+  <iframe ng-src="{{ trustSrc(ride.map) }}"></iframe>
   <a href="#" class="btn btn-primary cancel-button" ng-click="cancelRide()">Cancel Ride</a>
 </div>

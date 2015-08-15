@@ -1,6 +1,5 @@
 RidemonApp.controller("RequestController", ["$scope", "$http", "$q", "$sce", "RideService", function($scope, $http, $q, $sce, RideService) {
   $scope.current = {};
-  $scope.ride_id;  // ID of uber ride to use when cancelling a ride
 
   $scope.reset = function() {
     $scope.request = {};
